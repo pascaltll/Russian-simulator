@@ -108,31 +108,42 @@
                 <div class="card animate-slide-in full-height-card">
                     <h2 class="text-xl font-semibold text-gray-800"><i class="fas fa-book mr-2"></i>My Vocabulary</h2>
                     <form id="vocabForm" class="form">
-                        <div class="form-group">
-                            <label for="russianWord">Russian Word</label>
-                            <input type="text" id="russianWord" placeholder="Например: привет" required>
-                        </div>
-                        <div class="form-row-compact">
-                            <button type="button" id="suggestDetailsButton" class="btn btn-secondary compact-btn"><i class="fas fa-lightbulb mr-2"></i>Suggest Translation</button>
-                            
-                            <div class="form-group flex-grow ml-2">
-                                <label for="targetLanguage">Target Language</label>
-                                <select id="targetLanguage" class="form-control">
-                                    <option value="es">Spanish</option>
-                                    <option value="en">English</option>
-                                    <option value="pt">Portuguese</option>
-                                </select>
+                        <div class="flex flex-col md:flex-row md:space-x-6">
+                            <div class="md:w-1/2">
+                                <div class="form-group">
+                                    <label for="russianWord">Russian Word</label>
+                                    <input type="text" id="russianWord" placeholder="Например: привет" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="targetLanguage">Target Translation Language</label>
+                                    <select id="targetLanguage" class="form-control">
+                                        <option value="es">Spanish</option>
+                                        <option value="en">English</option>
+                                        <option value="pt">Portuguese</option>
+                                        <option value="de">German</option> 
+                                        <option value="fr">French</option>
+                                    </select>
+                                </div>
+                                <div class="flex space-x-2 mt-2">
+                                    <button type="button" id="suggestDetailsButton" class="btn btn-secondary flex-grow"><i class="fas fa-lightbulb mr-2"></i>Suggest Translation</button>
+                                    <button type="button" id="clearSuggestionButton" class="btn btn-tertiary hidden"><i class="fas fa-redo mr-2"></i>Clear</button>
+                                </div>
+                            </div>
+
+                            <div class="md:w-1/2 mt-4 md:mt-0">
+                                <div class="form-group">
+                                    <label for="translation">Translation</label>
+                                    <input type="text" id="translation" placeholder="For example: hello" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleSentence">Comment (optional)</label>
+                                    <input type="text" id="exampleSentence" placeholder="For example: Привет, как дела?">
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="translation">Translation</label>
-                            <input type="text" id="translation" placeholder="For example: hello" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleSentence">Comment (optional)</label>
-                            <input type="text" id="exampleSentence" placeholder="For example: Привет, как дела?">
-                        </div>
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-plus mr-2"></i>Add Vocabulary</button>
+
+                        <button type="submit" class="btn btn-primary w-full mt-6"><i class="fas fa-plus mr-2"></i>Add Vocabulary</button>
                     </form>
                     <ul id="vocabList" class="list scrollable-list mt-4">
                         <li>No vocabulary items yet.</li>
@@ -159,7 +170,8 @@
                     <button id="correctGrammarButton" class="btn btn-primary mb-4"><i class="fas fa-spell-check mr-2"></i>Correct Grammar</button>
                     
                     <div class="grammar-results scrollable-list">
-                        <p id="grammarCorrectionStatus" class="status-message hidden"></p> <div class="grammar-output-group">
+                        <p id="grammarCorrectionStatus" class="status-message hidden"></p> 
+                        <div class="grammar-output-group">
                             <label>Original Text:</label>
                             <p id="originalGrammarText" class="grammar-text"></p>
                         </div>
