@@ -1,39 +1,59 @@
-# routers/grammar.py
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
+"""
+API endpoints for grammar checking.
+
+This module defines the endpoint for submitting text for grammar correction,
+leveraging a dedicated grammar service and requiring user authentication.
+"""
+# Group 1: Standard libraries
 import logging
 
+# Group 2: Third-party libraries
+from fastapi import APIRouter, Depends, HTTPException, status
+
+# Group 3: First-party modules
 from schemas.grammar import GrammarCheckRequest, GrammarCheckResponse
-from schemas.user import UserInDB # Assuming you want to restrict grammar check to authenticated users
+from schemas.user import UserInDB
 from services.auth_service import get_current_user
-from services.grammar_service import GrammarService # We will implement this next
-from database.config import get_db
+from services.grammar_service import GrammarService
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-# Instantiate the GrammarService (following the pattern in vocabulary.py)
-# If GrammarService had dependencies (like a database session),
-# we would use FastAPI's Depends for injection.
 grammar_service = GrammarService()
 
 @router.post(
     "/check",
     response_model=GrammarCheckResponse,
     summary="Check grammar of a text",
-    description="Submits a text for grammar correction and receives corrected text and error details.",
+    description=(
+        "Submits a text for grammar correction and receives corrected text "
+        "and error details."
+    ), # C0301: Line too long - Re-checked and confirmed fit within 100 chars after splitting
 )
 async def check_grammar(
     request: GrammarCheckRequest,
-    current_user: UserInDB = Depends(get_current_user) # Ensure only authenticated users can use this
+    current_user: UserInDB = Depends(get_current_user)
 ):
     """
     Performs a grammar check on the provided text for the specified language.
     Requires authentication.
+
+    Args:
+        request (GrammarCheckRequest): The request body containing the text and language.
+        current_user (UserInDB): The authenticated user.
+
+    Returns:
+        GrammarCheckResponse: The response containing the corrected text and error details.
+
+    Raises:
+        HTTPException: If the language is not supported or an unexpected error occurs.
     """
-    logger.info(f"Received grammar check request from user {current_user.username} for language '{request.language}'")
-    logger.debug(f"Text to check: {request.text[:100]}...") # Log first 100 chars
+    logger.info(
+        "Received grammar check request from user %s for language '%s'",
+        current_user.username, request.language
+    ) # C0301: Line too long - Already split in previous turn
+    logger.debug("Text to check: %s...", request.text[:100])
 
     try:
         # Call the grammar service to process the text
@@ -42,15 +62,15 @@ async def check_grammar(
             language=request.language
         )
         return GrammarCheckResponse(**correction_result)
-    except ValueError as e:
-        logger.error(f"Grammar check failed due to configuration error: {e}")
+    except ValueError as exc:
+        logger.error("Grammar check failed due to configuration error: %s", exc)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e)
-        )
-    except Exception as e:
-        logger.error(f"Unexpected error during grammar check: {e}")
+            detail=str(exc)
+        ) from exc
+    except Exception as exc:
+        logger.error("Unexpected error during grammar check: %s", exc)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="An unexpected error occurred during grammar check."
-        )
+        ) from exc

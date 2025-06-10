@@ -1,48 +1,55 @@
-import whisper
-import os
+"""
+Utility module for audio transcription using the Whisper model.
+
+This module handles loading the Whisper model and transcribing audio files,
+including language detection.
+"""
+
 import logging
+import os
+
+import whisper
 
 logger = logging.getLogger(__name__)
 
-# Asegúrate de que el modelo de Whisper esté cargado aquí
-# Si cargas el modelo globalmente, asegúrate de que se haga una vez
-# Por ejemplo, puedes cargar 'base', 'small', 'medium', etc.
-try:
-    _model = whisper.load_model("base") # Puedes cambiar 'base' por el modelo que uses
-    logger.info("Whisper model loaded successfully.")
-except Exception as e:
-    logger.error(f"Error loading Whisper model: {e}", exc_info=True)
-    _model = None # Set to None if loading fails
+WHISPER_MODEL = None
 
-def transcribe_audio_with_whisper(audio_path: str) -> dict: # Changed return type to dict
+try:
+    logger.info("Attempting to load Whisper 'base' model...")
+    WHISPER_MODEL = whisper.load_model("base")
+    logger.info("Whisper 'base' model loaded successfully.")
+except (OSError, RuntimeError) as exc:
+    logger.error("Error loading Whisper model: %s", exc, exc_info=True)
+    WHISPER_MODEL = None
+
+
+def transcribe_audio_with_whisper(audio_path: str) -> dict:
     """
     Transcribes an audio file using the Whisper model and detects its language.
 
     Args:
-        audio_path: The path to the audio file.
+        audio_path (str): The path to the audio file.
 
     Returns:
-        A dictionary containing 'text' (transcription) and 'language' (detected language).
-        Returns an error string if transcription fails.
+        dict: A dictionary containing 'text' (transcription) and 'language' (detected language).
+              Returns an error dictionary if transcription fails.
     """
     if not os.path.exists(audio_path):
+        logger.error("Audio file not found at path: %s", audio_path)
         return {"text": "Error: Audio file not found.", "language": "unknown"}
-    
-    if _model is None:
+
+    if WHISPER_MODEL is None:
+        logger.error("Whisper model not loaded, cannot perform transcription.")
         return {"text": "Error: Whisper model not loaded.", "language": "unknown"}
 
     try:
-        # Perform transcription and language detection
-        # ¡CORRECCIÓN AQUÍ! Pasa fp16=False para decirle que use FP32
-        result = _model.transcribe(audio_path, fp16=False)
-        
-        # The 'result' object from whisper.transcribe usually contains 'text' and 'language'
+        result = WHISPER_MODEL.transcribe(audio_path, fp16=False)
         transcription_text = result.get("text", "Transcription not available.")
         detected_language = result.get("language", "unknown")
 
-        logger.info(f"Transcription successful. Detected language: {detected_language}")
+        logger.info("Transcription successful. Detected language: %s", detected_language)
         return {"text": transcription_text, "language": detected_language}
 
-    except Exception as e:
-        logger.error(f"Whisper transcription error: {e}", exc_info=True)
-        return {"text": f"Whisper transcription error: {str(e)}", "language": "error"}
+    except (ValueError, OSError, RuntimeError) as exc:
+        logger.error("Whisper transcription error: %s", exc, exc_info=True)
+        return {"text": f"Whisper transcription error: {exc}", "language": "error"}

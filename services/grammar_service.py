@@ -1,11 +1,28 @@
-# services/grammar_service.py
+"""
+Service for performing grammar checks on text.
+
+This module provides a singleton GrammarService that integrates with
+LanguageTool for actual grammar correction.
+"""
+# Group 1: Standard libraries
 import logging
 from typing import Dict, Any, List
+
+# Group 2: Third-party libraries
+import language_tool_python # Importar LanguageTool
 
 logger = logging.getLogger(__name__)
 
 class GrammarService:
+    """
+    Implements a singleton grammar correction service using LanguageTool.
+
+    This service provides methods to check and correct grammar in a given text
+    for specified languages, and provides detailed error information.
+    """
     _instance = None
+    _tool = None # Atributo para la instancia de LanguageTool
+    _current_lt_language = None # Nuevo atributo para rastrear el idioma actual del tool
 
     def __new__(cls):
         """
@@ -18,106 +35,121 @@ class GrammarService:
 
     def _initialize(self):
         """
-        Initialize the grammar correction model or API client here.
-        For demonstration, we'll just log.
+        Initializes the GrammarService. We will lazily initialize the LanguageTool
+        instance in check_grammar based on the requested language.
         """
-        logger.info("Initializing GrammarService...")
-        # In a real application, you would load your NLP model here,
-        # e.g., using transformers, NLTK, spaCy, or initialize a LanguageTool client.
-        # Example for LanguageTool:
-        # import language_tool_python
-        # self.tool = language_tool_python.LanguageTool('en-US') # Or 'es' for Spanish
-        logger.info("GrammarService initialized (placeholder).")
+        logger.info("Initializing GrammarService placeholder for LanguageTool...")
+        self._tool = None # Aseguramos que sea None inicialmente
+        self._current_lt_language = None # Ningún idioma cargado inicialmente
+        logger.info("GrammarService initialized.")
+
 
     def check_grammar(self, text: str, language: str) -> Dict[str, Any]:
         """
-        Performs grammar correction on the given text.
+        Performs grammar correction on the given text using LanguageTool.
 
         Args:
-            text: The input text to check.
-            language: The language of the text (e.g., 'en', 'es').
+            text (str): The input text to check.
+            language (str): The language of the text (e.g., 'en', 'es', 'ru').
+                            LanguageTool expects specific codes like 'en-US', 'es-ES', 'ru-RU'.
+                            We'll map common short codes to LanguageTool's expected format.
 
         Returns:
-            A dictionary conforming to GrammarCheckResponse schema.
+            Dict[str, Any]: A dictionary conforming to GrammarCheckResponse schema
+                            containing the original text, corrected text,
+                            an explanation, and a list of errors.
         """
-        logger.info(f"Checking grammar for text in '{language}': {text[:50]}...") # Log first 50 chars
+        logger.info("Checking grammar for text in '%s': %s...", language, text[:50])
 
-        # --- Placeholder/Mock Grammar Correction Logic ---
-        # In a real scenario, you would use an NLP library or an external API here.
-        # Example using a hypothetical grammar checking library:
-        # if self.tool:
-        #     matches = self.tool.check(text)
-        #     corrected_text = language_tool_python.utils.correct(text, matches)
-        #     errors = []
-        #     for match in matches:
-        #         errors.append({
-        #             "message": match.message,
-        #             "bad_word": text[match.offset:match.offset + match.errorLength],
-        #             "suggestions": list(match.replacements),
-        #             "offset": match.offset,
-        #             "length": match.errorLength
-        #         })
-        #     explanation = "Grammar corrections applied based on common rules."
-        # else:
-        #     corrected_text = text # No correction if tool not loaded
-        #     errors = []
-        #     explanation = "Grammar correction service not available."
+        # Mapeo de códigos de idioma cortos a los esperados por LanguageTool.
+        lt_language_map = {
+            "en": "en-US", # English (United States)
+            "es": "es-ES", # Spanish (Spain)
+            "ru": "ru-RU", # Russian (Russia)
+            # Puedes añadir más idiomas aquí si los necesitas:
+            # "de": "de-DE", # German
+            # "fr": "fr-FR", # French
+            # "pt": "pt-PT", # Portuguese (Portugal)
+            # "pt-br": "pt-BR" # Portuguese (Brazil)
+        }
+        
+        target_lt_language = lt_language_map.get(language.lower(), language)
+        
+        # Lógica clave: Reinicializar LanguageTool si el idioma solicitado es diferente
+        # del idioma de la instancia actualmente cargada.
+        if self._tool is None or self._current_lt_language != target_lt_language:
+            logger.info(f"Language mismatch or tool not initialized. Re-initializing LanguageTool for: {target_lt_language}")
+            try:
+                # Aquí se crea una nueva instancia de LanguageTool con el idioma correcto.
+                # Nota: La primera vez que se carga un idioma, puede haber una ligera demora
+                # mientras LanguageTool descarga los datos necesarios.
+                self._tool = language_tool_python.LanguageTool(target_lt_language)
+                self._current_lt_language = target_lt_language
+                logger.info(f"LanguageTool successfully initialized for {target_lt_language}.")
+            except Exception as e:
+                logger.error(f"Failed to initialize LanguageTool for language {target_lt_language}. Error: %s", e)
+                # Si falla la inicialización para el idioma solicitado, devolvemos un error.
+                return {
+                    "original_text": text,
+                    "corrected_text": text,
+                    "explanation": f"Failed to load grammar service for '{language}'. Please check server logs. Error: {e}",
+                    "errors": [],
+                    "language": language
+                }
 
-        # For this placeholder, we'll simulate a correction:
+        # Ahora que sabemos que _tool está inicializado con el idioma correcto,
+        # podemos proceder con la comprobación.
+        try:
+            # Realiza la comprobación gramatical. No se pasa el argumento 'language' aquí.
+            matches = self._tool.check(text) 
+            logger.debug("LanguageTool matches found: %s", len(matches))
+        except Exception as e:
+            logger.error("Error during LanguageTool check for language '%s': %s", language, e)
+            return {
+                "original_text": text,
+                "corrected_text": text,
+                "explanation": f"Error during grammar check for '{language}': {e}. Please try again later.",
+                "errors": [],
+                "language": language
+            }
+
         corrected_text = text
-        explanation = "No grammar errors found, or service is a placeholder."
-        errors: List[Dict[str, Any]] = []
+        explanation_parts = []
+        errors_list: List[Dict[str, Any]] = []
 
-        if language == "en":
-            if "i am" in text.lower() and "i'm" not in text.lower():
-                corrected_text = text.replace("i am", "I'm", 1) # Simple example
-                explanation = "Contracted 'I am' to 'I'm'."
-                errors.append({
-                    "message": "Consider using contraction.",
-                    "bad_word": "i am",
-                    "suggestions": ["I'm"],
-                    "offset": text.lower().find("i am"),
-                    "length": 4
-                })
-            elif "hello world." in text.lower():
-                corrected_text = "Hello, world!"
-                explanation = "Corrected punctuation and capitalization for 'Hello world'."
-                errors.append({
-                    "message": "Punctuation and capitalization error.",
-                    "bad_word": "hello world.",
-                    "suggestions": ["Hello, world!"],
-                    "offset": text.lower().find("hello world."),
-                    "length": 12
-                })
+        try:
+            corrected_text = language_tool_python.utils.correct(text, matches)
+        except Exception as e:
+            logger.warning(f"Failed to apply corrections to text. Original text will be returned. Error: {e}")
+            corrected_text = text
 
-        elif language == "es":
-            if "soy un" in text.lower() and "soy uno" not in text.lower():
-                corrected_text = text.replace("soy un", "soy uno", 1) # Simple example
-                explanation = "Corrected 'un' to 'uno' for masculine noun."
-                errors.append({
-                    "message": "Gender agreement error.",
-                    "bad_word": "soy un",
-                    "suggestions": ["soy uno"],
-                    "offset": text.lower().find("soy un"),
-                    "length": 6
-                })
-            elif "hola mundo." in text.lower():
-                corrected_text = "¡Hola, mundo!"
-                explanation = "Corrected punctuation and capitalization for 'Hola mundo'."
-                errors.append({
-                    "message": "Punctuation and capitalization error.",
-                    "bad_word": "hola mundo.",
-                    "suggestions": ["¡Hola, mundo!"],
-                    "offset": text.lower().find("hola mundo."),
-                    "length": 11
-                })
+        for match in matches:
+            if match.replacements:
+                explanation_parts.append(f"Error: '{match.message}' for '{match.context[match.offsetInContext : match.offsetInContext + match.errorLength]}' -> Suggestion: '{match.replacements[0]}'")
+            else:
+                explanation_parts.append(f"Error: '{match.message}' in '{match.context}'")
 
-        # --- End of Placeholder Logic ---
+            errors_list.append({
+                "message": match.message,
+                "bad_word": match.context[match.offsetInContext : match.offsetInContext + match.errorLength], 
+                "suggestions": match.replacements,
+                "offset": match.offset,
+                "length": match.errorLength
+            })
+
+        if not errors_list and text == corrected_text:
+            explanation = "No grammar errors found."
+        elif errors_list:
+            explanation = "Corrections applied:\n" + "\n".join(explanation_parts[:5])
+            if len(explanation_parts) > 5:
+                explanation += "\n(and more errors...)"
+        else:
+            explanation = "Corrections made, but no specific explanations generated."
 
         return {
             "original_text": text,
             "corrected_text": corrected_text,
             "explanation": explanation,
-            "errors": errors,
+            "errors": errors_list,
             "language": language
         }
