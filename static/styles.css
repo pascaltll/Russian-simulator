@@ -1,0 +1,419 @@
+/* static/styles.css */
+
+/* General Body Styling */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f6; /* Light grey background */
+    color: #333; /* Darker text color */
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align to top instead of center vertically */
+    min-height: 100vh;
+    padding-top: 50px; /* Add some space from the top */
+}
+
+/* Auth Card Container */
+.auth-card-container {
+    width: 100%;
+    max-width: 450px; /* Max width for auth form */
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex; /* Flexbox for centering auth card */
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 100px); /* Adjust height for auth section */
+}
+
+.auth-card {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+}
+
+.auth-tabs {
+    display: flex;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.btn-tab {
+    flex-grow: 1;
+    padding: 12px 0;
+    text-align: center;
+    border: none;
+    background-color: transparent;
+    font-size: 1.1em;
+    font-weight: 500;
+    cursor: pointer;
+    color: #777;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
+    border-radius: 0; /* Remove border-radius for tab effect */
+}
+
+.btn-tab.active {
+    color: #3498db;
+    border-bottom: 3px solid #3498db;
+    font-weight: 700;
+}
+
+.btn-tab:hover:not(.active) {
+    color: #555;
+}
+
+.auth-form h2 {
+    margin-top: 0;
+    margin-bottom: 25px;
+    color: #2c3e50;
+    font-size: 1.8em;
+    text-align: center;
+}
+
+/* Message for login/register status */
+.message {
+    margin-top: 15px;
+    text-align: center;
+    font-weight: 500;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.message[style*="green"] {
+    background-color: #e6ffe6;
+    color: #27ae60;
+}
+
+.message[style*="red"] {
+    background-color: #ffe6e6;
+    color: #e74c3c;
+}
+
+
+/* Main Application Container */
+.container {
+    width: 100%;
+    max-width: 960px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Header Styling */
+.header {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+.header h1 {
+    margin: 0;
+    color: #2c3e50; /* Dark blue heading */
+    font-size: 2em;
+    font-weight: 700;
+}
+
+.app-header-controls { /* Use this for general app controls like logout */
+    display: flex;
+    gap: 10px;
+}
+
+
+/* Main Content Layout */
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+/* Responsive layout for larger screens */
+@media (min-width: 768px) {
+    .main-content {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+    .card:nth-child(1) { /* Record Audio card */
+        grid-column: span 1;
+    }
+    .card:nth-child(2) { /* My Transcriptions card */
+        grid-column: span 1;
+    }
+    .card:nth-child(3) { /* My Vocabulary card */
+        grid-column: span 2; /* Make vocabulary span full width */
+    }
+}
+
+
+/* Card Styling */
+.card {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+}
+
+.card h2 {
+    color: #34495e; /* Slightly lighter dark blue */
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+/* Button Styling */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 700;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+    background-color: #3498db; /* Blue */
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+.btn-secondary {
+    background-color: #95a5a6; /* Grey */
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #7f8c8d;
+}
+
+.btn-success {
+    background-color: #2ecc71; /* Green */
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #27ae60;
+}
+
+.btn-danger {
+    background-color: #e74c3c; /* Red */
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+.btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Form Styling */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 400;
+    color: #555;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
+    width: calc(100% - 20px); /* Adjust for padding */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box; /* Include padding in width */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+    outline: none;
+}
+
+/* List Styling */
+.list {
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+}
+
+.list li {
+    background-color: #f8f8f8;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95em;
+    color: #444;
+}
+
+/* Specific elements styles */
+.recording-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.status-message {
+    font-weight: 700;
+    color: #777;
+    margin-top: 10px;
+    min-height: 20px; /* Reserve space */
+}
+
+.recording-indicator {
+    color: #e74c3c;
+    animation: pulse 1.5s infinite;
+}
+
+.transcription-result {
+    background-color: #eaf6fd; /* Light blue background for result */
+    border: 1px solid #d4edda;
+    border-radius: 5px;
+    padding: 15px;
+    margin-top: 20px;
+    font-family: 'Roboto Mono', monospace; /* Monospaced font for code */
+    white-space: pre-wrap; /* Preserve whitespace and wrap text */
+    word-wrap: break-word; /* Break long words */
+    color: #2c3e50;
+}
+
+.transcription-result p {
+    margin: 0 0 8px 0;
+}
+.transcription-result p:last-child {
+    margin-bottom: 0;
+}
+
+.transcription-result code {
+    display: block; /* Ensures it takes full width and starts on new line */
+    background-color: #dbeaf9; /* Slightly darker background for the code block */
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    overflow-x: auto; /* Allow horizontal scrolling for very long lines */
+    white-space: pre-wrap; /* Wrap long lines within the code block */
+}
+
+
+/* Animations */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+
+/* Estilos para el botón de eliminar (más pequeño y con un color más suave) */
+.delete-btn {
+    background-color: #d3d3d3; /* Un gris claro que encaja con el estilo */
+    color: #333; /* Texto oscuro para contraste */
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px; /* Reducir el padding para hacerlo más pequeño */
+    font-size: 0.8em; /* Tamaño de fuente más pequeño */
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-left: 10px; /* Separación del texto */
+    flex-shrink: 0; /* Evita que el botón se encoja */
+}
+
+.delete-btn:hover {
+    background-color: #a0a0a0; /* Un gris un poco más oscuro al pasar el ratón */
+    transform: translateY(-1px); /* Efecto ligero al pasar el ratón */
+}
+
+.delete-btn:active {
+    background-color: #888;
+    transform: translateY(0);
+}
+
+/* Estilo para los elementos de la lista de transcripciones para que el botón esté a la derecha */
+.transcription-item {
+    display: flex; /* Usar flexbox */
+    justify-content: space-between; /* Espacio entre el texto y el botón */
+    align-items: center; /* Alinear verticalmente */
+    padding: 10px; /* Padding ajustado para ser consistente */
+    border-bottom: 1px solid #eee;
+    background-color: #f9f9f9;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+.transcription-item:last-child {
+    border-bottom: none;
+}
+
+/* Estilo para el contenido de texto dentro de la transcripción */
+.transcription-text-content {
+    flex-grow: 1; /* Permitir que el texto ocupe el espacio restante */
+    word-break: break-word; /* Para que el texto largo se ajuste */
+    margin-right: 10px; /* Espacio entre el texto y el botón */
+}
+
+/* Estilos para el nuevo botón "Show All Transcriptions" */
+#loadAllTranscriptionsButton {
+    background-color: #6c757d; /* Un gris similar a los botones secundarios */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-top: 15px; /* Espacio superior para separarlo de la lista */
+    width: fit-content; /* Ajusta el ancho al contenido */
+    display: block; /* Para que ocupe su propia línea si es necesario */
+    margin-left: auto; /* Centrar el botón si el padre es un flexbox o tiene width fijo */
+    margin-right: auto;
+}
+
+#loadAllTranscriptionsButton:hover {
+    background-color: #5a6268;
+}
+
+#loadAllTranscriptionsButton:active {
+    background-color: #4e555b;
+}

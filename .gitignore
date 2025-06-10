@@ -1,0 +1,35 @@
+# Python bytecode and compilation artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+# If you use a virtual environment, uncomment the line below and adjust if its name is different (e.g., .venv)
+tempora_env/
+
+# Database files
+*.db
+app.db
+
+# Logs and temporary files
+*.log
+salida/
+temp_audio/
+
+# Editor/IDE specific files (common ones)
+.vscode/
+.idea/
+*.swp
+*~
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Dependency management
+# If you also manage dependencies with pip, you might want to ignore the whole venv
+# This is usually where pip installs packages, and it can be recreated from requirements.txt
+# venv/ # Uncomment if your virtual environment is named 'venv'
+# Environment variables
+.env

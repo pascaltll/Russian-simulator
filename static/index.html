@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Simulator</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="authContainer" class="auth-card-container">
+        <div class="auth-card">
+            <div class="auth-tabs">
+                <button id="showLoginButton" class="btn btn-tab active">Login</button>
+                <button id="showRegisterButton" class="btn btn-tab">Register</button>
+            </div>
+            
+            <form id="loginForm" class="auth-form auth-section">
+                <h2>Login</h2>
+                <div class="form-group">
+                    <label for="loginUsername">Username</label>
+                    <input type="text" id="loginUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <p id="loginMessage" class="message"></p>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+
+            <form id="registerForm" class="auth-form auth-section" style="display: none;">
+                <h2>Register</h2>
+                <div class="form-group">
+                    <label for="registerUsername">Username</label>
+                    <input type="text" id="registerUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email (optional)</label>
+                    <input type="email" id="registerEmail">
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                <p id="registerMessage" class="message"></p>
+                <button type="submit" class="btn btn-secondary">Register</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="appContainer" class="container" style="display: none;">
+        <header class="header">
+            <h1>Language Simulator</h1>
+            <div class="app-header-controls">
+                <button id="logoutButton" class="btn btn-secondary">Logout</button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <section class="card">
+                <h2>Record Audio</h2>
+                <div class="recording-controls">
+                    <button id="startButton" class="btn btn-success">Start Recording</button>
+                    <button id="stopButton" class="btn btn-danger" disabled>Stop Recording</button>
+                </div>
+                <p id="recordingStatus" class="status-message"></p>
+                <button id="transcribeButton" class="btn btn-primary" style="display: none;">Transcribe Recording</button>
+                <div id="transcriptionResult" class="transcription-result">
+                    </div>
+            </section>
+
+            <section class="card">
+                <h2>Upload Audio</h2>
+                <div class="form-group">
+                    <label for="audioUploadInput">Choose an audio file:</label>
+                    <input type="file" id="audioUploadInput" accept="audio/*">
+                </div>
+                <button id="uploadAndTranscribeButton" class="btn btn-primary" disabled>Upload & Transcribe</button>
+                <p id="uploadStatus" class="status-message"></p>
+                <div id="uploadTranscriptionResult" class="transcription-result">
+                    </div>
+            </section>
+
+            <section class="card">
+                <h2>My Transcriptions</h2>
+                <ul id="transcriptionList" class="list">
+                    <li>No transcriptions yet.</li>
+                </ul>
+                <button id="loadAllTranscriptionsButton" class="btn btn-secondary">Show All Transcriptions</button>
+            </section>
+
+            <section class="card">
+                <h2>My Vocabulary</h2>
+                <form id="vocabForm" class="form">
+                    <div class="form-group">
+                        <label for="russianWord">Russian Word</label>
+                        <input type="text" id="russianWord" placeholder="Например: привет" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="targetLanguage">Target Language for Suggestion</label>
+                        <select id="targetLanguage" class="form-control">
+                            <option value="es">Spanish</option>
+                            <option value="en">English</option>
+                            <option value="pt">Portuguese</option>
+                            </select>
+                    </div>
+                    <button type="button" id="suggestDetailsButton" class="btn btn-secondary">Suggest Translation & Comment</button>
+                    <div class="form-group">
+                        <label for="translation">Translation</label>
+                        <input type="text" id="translation" placeholder="For example: hello" required>
+                    </div>
+                    <!-- <div class="form-group">
+                        <label for="translation">Translation</label>
+                        <input type="text" id="translation" placeholder="For example: hello" required>
+                    </div> -->
+                    <div class="form-group">
+                        <label for="exampleSentence">Add a comment (optional)</label>
+                        <input type="text" id="exampleSentence" placeholder="For example: Привет, как дела?">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Vocabulary</button>
+                </form>
+                <ul id="vocabList" class="list">
+                    <li>No vocabulary items yet.</li>
+                </ul>
+            </section>
+        </main>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+.
+├── __pycache__
+│   └── main.cpython-312.pyc
+├── alembic
+│   ├── README
+│   ├── __pycache__
+│   │   └── env.cpython-312.pyc
+│   ├── env.py
+│   ├── script.py.mako
+│   └── versions
+│       ├── 6d22c99e8da4_add_language_column_to_audio_submissions.py
+│       ├── 93c3eb534cfd_initial_schema_setup.py
+│       ├── __pycache__
+│       │   ├── 6d22c99e8da4_add_language_column_to_audio_submissions.cpython-312.pyc
+│       │   ├── 93c3eb534cfd_initial_schema_setup.cpython-312.pyc
+│       │   └── fda95a2801b6_add_example_sentence_to_vocabulary_items.cpython-312.pyc
+│       └── fda95a2801b6_add_example_sentence_to_vocabulary_items.py
+├── alembic.ini
+├── app.db
+├── arbol.txt
+├── database
+│   ├── __init__.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-312.pyc
+│   │   ├── base_class.cpython-312.pyc
+│   │   ├── config.cpython-312.pyc
+│   │   └── crud.cpython-312.pyc
+│   ├── base_class.py
+│   ├── config.py
+│   └── crud.py
+├── docker-compose.yml
+├── main.py
+├── models
+│   ├── __init__.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-312.pyc
+│   │   ├── audio_submission.cpython-312.pyc
+│   │   ├── user.cpython-312.pyc
+│   │   └── vocabulary_item.cpython-312.pyc
+│   ├── audio_submission.py
+│   ├── user.py
+│   └── vocabulary_item.py
+├── requirements.txt
+├── routers
+│   ├── __pycache__
+│   │   ├── audio.cpython-312.pyc
+│   │   ├── auth.cpython-312.pyc
+│   │   └── vocabulary.cpython-312.pyc
+│   ├── audio.py
+│   ├── auth.py
+│   └── vocabulary.py
+├── salida
+├── schemas
+│   ├── __pycache__
+│   │   ├── audio_submission.cpython-312.pyc
+│   │   ├── user.cpython-312.pyc
+│   │   └── vocabulary_item.cpython-312.pyc
+│   ├── audio_submission.py
+│   ├── user.py
+│   └── vocabulary_item.py
+├── services
+│   ├── __pycache__
+│   │   ├── auth_service.cpython-312.pyc
+│   │   └── vocabulary_nlp_service.cpython-312.pyc
+│   ├── auth_service.py
+│   └── vocabulary_nlp_service.py
+├── start.sh
+├── static
+│   ├── app.js
+│   ├── index.html
+│   └── styles.css
+├── telegram_bot
+│   ├── __init__.py
+│   ├── __pycache__
+│   │   └── __init__.cpython-312.pyc
+│   ├── bot.py
+│   └── handlers
+│       ├── __init__.py
+│       ├── __pycache__
+│       │   ├── __init__.cpython-312.pyc
+│       │   ├── audio_handler.cpython-312.pyc
+│       │   └── commands.cpython-312.pyc
+│       ├── audio_handler.py
+│       └── commands.py
+├── temp_audio
+│   ├── 1efcceb7-1369-4b85-8f96-f7744dd54caa.webm
+│   ├── 3ab57033-1ee9-4ec6-9ba3-7a04af940cc9.webm
+│   ├── 53783d19-48f6-4ea5-9e35-0160e1838da0.webm
+│   ├── 5c3cf4e2-08b0-4214-bf69-b95216b8c392.webm
+│   ├── 6a1f9e00-3643-4ef2-b26f-600ace6a27f9.webm
+│   ├── 6a3c4a07-c94f-411c-8e8e-57225337d992.webm
+│   ├── 6dbf8c13-6bf2-44a9-bf2e-c7825da886b2.webm
+│   ├── a5bc6d2d-e50b-4c4c-afd2-94833afdc689.webm
+│   └── be1a156d-78cb-475e-9067-3fd56c90c96d.webm
+├── tests
+│   ├── conftest.py
+│   ├── test_audio.py
+│   ├── test_auth.py
+│   └── test_vocabulary.py
+└── utils
+    ├── __pycache__
+    │   └── whisper_transcriber.cpython-312.pyc
+    └── whisper_transcriber.py
+
+25 directories, 78 files
