@@ -1,0 +1,52 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.2.2, pluggy-1.6.0
+rootdir: /home/jctuesta/mi_proyecto
+plugins: asyncio-0.23.7, cov-6.1.1, anyio-4.9.0
+asyncio: mode=Mode.STRICT
+collected 6 items
+
+tests/test_audio.py ..                                                   [ 33%]
+tests/test_auth.py ...                                                   [ 83%]
+tests/test_vocabulary.py .                                               [100%]
+
+=============================== warnings summary ===============================
+../tempora_env/lib/python3.12/site-packages/pydantic/_internal/_config.py:284
+../tempora_env/lib/python3.12/site-packages/pydantic/_internal/_config.py:284
+../tempora_env/lib/python3.12/site-packages/pydantic/_internal/_config.py:284
+../tempora_env/lib/python3.12/site-packages/pydantic/_internal/_config.py:284
+../tempora_env/lib/python3.12/site-packages/pydantic/_internal/_config.py:284
+  /home/jctuesta/tempora_env/lib/python3.12/site-packages/pydantic/_internal/_config.py:284: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.7/migration/
+    warnings.warn(DEPRECATION_MESSAGE, DeprecationWarning)
+
+../tempora_env/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+  /home/jctuesta/tempora_env/lib/python3.12/site-packages/passlib/utils/__init__.py:854: DeprecationWarning: 'crypt' is deprecated and slated for removal in Python 3.13
+    from crypt import crypt as _crypt
+
+../tempora_env/lib/python3.12/site-packages/transformers/models/marian/tokenization_marian.py:177
+  /home/jctuesta/tempora_env/lib/python3.12/site-packages/transformers/models/marian/tokenization_marian.py:177: UserWarning: Recommended: pip install sacremoses.
+    warnings.warn("Recommended: pip install sacremoses.")
+
+tests/test_audio.py::test_transcribe_audio_authenticated
+tests/test_audio.py::test_transcribe_audio_unauthenticated
+tests/test_auth.py::test_register_user
+tests/test_auth.py::test_register_user_duplicate_username
+tests/test_auth.py::test_login_for_access_token
+tests/test_vocabulary.py::test_suggest_translation
+  /home/jctuesta/tempora_env/lib/python3.12/site-packages/httpx/_client.py:1426: DeprecationWarning: The 'app' shortcut is now deprecated. Use the explicit style 'transport=ASGITransport(app=...)' instead.
+    warnings.warn(message, DeprecationWarning)
+
+tests/test_audio.py::test_transcribe_audio_authenticated
+  /home/jctuesta/tempora_env/lib/python3.12/site-packages/passlib/handlers/argon2.py:716: DeprecationWarning: Accessing argon2.__version__ is deprecated and will be removed in a future release. Use importlib.metadata directly to query for structlog's packaging metadata.
+    _argon2_cffi.__version__, max_version)
+
+tests/test_audio.py::test_transcribe_audio_authenticated
+tests/test_vocabulary.py::test_suggest_translation
+  /home/jctuesta/tempora_env/lib/python3.12/site-packages/jose/jwt.py:311: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = timegm(datetime.utcnow().utctimetuple())
+
+tests/test_audio.py::test_transcribe_audio_authenticated
+  /home/jctuesta/tempora_env/lib/python3.12/site-packages/whisper/transcribe.py:115: UserWarning: FP16 is not supported on CPU; using FP32 instead
+    warnings.warn("FP16 is not supported on CPU; using FP32 instead")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 6 passed, 17 warnings in 3.25s ========================

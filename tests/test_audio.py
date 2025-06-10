@@ -2,39 +2,51 @@
 import pytest
 from httpx import AsyncClient
 import os
-import io
+
+AUDIO_FILE_PATH = "tests/audio/test_audio_1.ogg"
+
+@pytest.mark.asyncio
+async def test_transcribe_audio_authenticated(async_client: AsyncClient, auth_headers: dict):
+    """
+    Test authenticated audio transcription using an existing audio file.
+    """
+    if not os.path.exists(AUDIO_FILE_PATH):
+        pytest.fail(f"Audio file not found at specified path: {AUDIO_FILE_PATH}")
+
+    media_type = "audio/ogg"
+
+    with open(AUDIO_FILE_PATH, "rb") as audio_file:
+        files = {"audio_file": (os.path.basename(AUDIO_FILE_PATH), audio_file, media_type)}
+        response = await async_client.post(
+            "/api/audio/transcribe-audio",
+            headers=auth_headers,
+            files=files
+        )
+
+    assert response.status_code == 201
+
+    # --- ¡CORREGIDO AQUÍ! Cambiando 'transcribed_text' a 'original_transcript' ---
+    assert "original_transcript" in response.json()
+    assert isinstance(response.json()["original_transcript"], str)
+
+    print(f"Transcribed Text: {response.json()['original_transcript']}")
 
 @pytest.mark.asyncio
 async def test_transcribe_audio_unauthenticated(async_client: AsyncClient):
-    with open("tests/dummy.wav", "wb") as f:
-        f.write(b"dummy audio data")
-    response = await async_client.post(
-        "/api/audio/transcribe-audio",
-        files={"audio_file": ("dummy.wav", open("tests/dummy.wav", "rb"), "audio/wav")}
-    )
-    assert response.status_code == 401
-    os.remove("tests/dummy.wav")
+    """
+    Test unauthenticated audio transcription (should return 401).
+    """
+    if not os.path.exists(AUDIO_FILE_PATH):
+        pytest.fail(f"Audio file not found at specified path: {AUDIO_FILE_PATH}")
 
-@pytest.mark.asyncio
-async def test_transcribe_audio_authenticated(async_client: AsyncClient):
-    await async_client.post("/api/auth/register", json={
-        "username": "audio_user",
-        "email": "audio@example.com",
-        "password": "password123"
-    })
-    login_response = await async_client.post("/api/auth/token", data={
-        "username": "audio_user",
-        "password": "password123"
-    })
-    token = login_response.json()["access_token"]
-    
-    with open("tests/dummy.wav", "wb") as f:
-        f.write(b"dummy audio data")
-    with open("tests/dummy.wav", "rb") as f:
+    media_type = "audio/ogg"
+
+    with open(AUDIO_FILE_PATH, "rb") as audio_file:
+        files = {"audio_file": (os.path.basename(AUDIO_FILE_PATH), audio_file, media_type)}
         response = await async_client.post(
             "/api/audio/transcribe-audio",
-            files={"audio_file": ("dummy.wav", f, "audio/wav")},
-            headers={"Authorization": f"Bearer {token}"}
+            files=files
         )
-    assert response.status_code == 201
-    os.remove("tests/dummy.wav")
+    assert response.status_code == 401
+    assert "detail" in response.json()
+    assert response.json()["detail"] == "Not authenticated"

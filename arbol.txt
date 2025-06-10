@@ -50,15 +50,18 @@
 │   ├── __pycache__
 │   │   ├── audio.cpython-312.pyc
 │   │   ├── auth.cpython-312.pyc
+│   │   ├── grammar.cpython-312.pyc
 │   │   └── vocabulary.cpython-312.pyc
 │   ├── audio.py
 │   ├── auth.py
 │   ├── grammar.py
 │   └── vocabulary.py
 ├── salida
+├── salida_test
 ├── schemas
 │   ├── __pycache__
 │   │   ├── audio_submission.cpython-312.pyc
+│   │   ├── grammar.cpython-312.pyc
 │   │   ├── user.cpython-312.pyc
 │   │   └── vocabulary_item.cpython-312.pyc
 │   ├── audio_submission.py
@@ -68,6 +71,7 @@
 ├── services
 │   ├── __pycache__
 │   │   ├── auth_service.cpython-312.pyc
+│   │   ├── grammar_service.cpython-312.pyc
 │   │   └── vocabulary_nlp_service.cpython-312.pyc
 │   ├── auth_service.py
 │   ├── grammar_service.py
@@ -95,6 +99,16 @@
 │   ├── a5bc6d2d-e50b-4c4c-afd2-94833afdc689.webm
 │   └── be1a156d-78cb-475e-9067-3fd56c90c96d.webm
 ├── tests
+│   ├── __pycache__
+│   │   ├── conftest.cpython-312-pytest-8.2.2.pyc
+│   │   ├── test_audio.cpython-312-pytest-8.2.2.pyc
+│   │   ├── test_auth.cpython-312-pytest-8.2.2.pyc
+│   │   └── test_vocabulary.cpython-312-pytest-8.2.2.pyc
+│   ├── audio
+│   │   ├── dummy.wav
+│   │   ├── test_audio_1.ogg
+│   │   ├── test_audio_2.mp3
+│   │   └── test_audio_3.mp3
 │   ├── conftest.py
 │   ├── test_audio.py
 │   ├── test_auth.py
@@ -104,4 +118,4 @@
     │   └── whisper_transcriber.cpython-312.pyc
     └── whisper_transcriber.py
 
-23 directories, 82 files
+25 directories, 94 files
