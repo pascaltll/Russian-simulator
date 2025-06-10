@@ -4,127 +4,190 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Language Simulator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="/static/styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="authContainer" class="auth-card-container">
-        <div class="auth-card">
+        <div class="auth-card animate-slide-in">
+            <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Language Simulator</h1>
             <div class="auth-tabs">
                 <button id="showLoginButton" class="btn btn-tab active">Login</button>
                 <button id="showRegisterButton" class="btn btn-tab">Register</button>
             </div>
             
             <form id="loginForm" class="auth-form auth-section">
-                <h2>Login</h2>
+                <h2 class="text-xl font-semibold text-gray-800">Login</h2>
                 <div class="form-group">
-                    <label for="loginUsername">Username</label>
+                    <label for="loginUsername"><i class="fas fa-user mr-2"></i>Username</label>
                     <input type="text" id="loginUsername" required>
                 </div>
                 <div class="form-group">
-                    <label for="loginPassword">Password</label>
+                    <label for="loginPassword"><i class="fas fa-lock mr-2"></i>Password</label>
                     <input type="password" id="loginPassword" required>
                 </div>
                 <p id="loginMessage" class="message"></p>
-                <button type="submit" class="btn btn-primary">Login</button>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-sign-in-alt mr-2"></i>Login</button>
             </form>
 
             <form id="registerForm" class="auth-form auth-section" style="display: none;">
-                <h2>Register</h2>
+                <h2 class="text-xl font-semibold text-gray-800">Register</h2>
                 <div class="form-group">
-                    <label for="registerUsername">Username</label>
+                    <label for="registerUsername"><i class="fas fa-user mr-2"></i>Username</label>
                     <input type="text" id="registerUsername" required>
                 </div>
                 <div class="form-group">
-                    <label for="registerEmail">Email (optional)</label>
+                    <label for="registerEmail"><i class="fas fa-envelope mr-2"></i>Email (optional)</label>
                     <input type="email" id="registerEmail">
                 </div>
                 <div class="form-group">
-                    <label for="registerPassword">Password</label>
+                    <label for="registerPassword"><i class="fas fa-lock mr-2"></i>Password</label>
                     <input type="password" id="registerPassword" required>
                 </div>
                 <p id="registerMessage" class="message"></p>
-                <button type="submit" class="btn btn-secondary">Register</button>
+                <button type="submit" class="btn btn-secondary"><i class="fas fa-user-plus mr-2"></i>Register</button>
             </form>
         </div>
     </div>
 
-    <div id="appContainer" class="container" style="display: none;">
-        <header class="header">
-            <h1>Language Simulator</h1>
-            <div class="app-header-controls">
-                <button id="logoutButton" class="btn btn-secondary">Logout</button>
+    <div id="appContainer" class="app-container" style="display: none;">
+        <header class="header animate-slide-in">
+            <h1 class="text-3xl font-bold text-gray-800">Language Simulator</h1>
+            <div class="user-info">
+                <span id="loggedInUsername" class="text-gray-700 font-medium"></span>
+                <button id="logoutButton" class="btn btn-secondary"><i class="fas fa-sign-out-alt mr-2"></i>Logout</button>
             </div>
         </header>
 
+        <nav class="main-nav">
+            <button class="nav-tab active" data-target="audioSection"><i class="fas fa-headphones mr-2"></i>Audio Tools</button>
+            <button class="nav-tab" data-target="transcriptionSection"><i class="fas fa-list mr-2"></i>My Transcriptions</button>
+            <button class="nav-tab" data-target="vocabularySection"><i class="fas fa-book mr-2"></i>My Vocabulary</button>
+            <button class="nav-tab" data-target="grammarSection"><i class="fas fa-check-circle mr-2"></i>Grammar Check</button>
+        </nav>
+
         <main class="main-content">
-            <section class="card">
-                <h2>Record Audio</h2>
-                <div class="recording-controls">
-                    <button id="startButton" class="btn btn-success">Start Recording</button>
-                    <button id="stopButton" class="btn btn-danger" disabled>Stop Recording</button>
+            <section id="audioSection" class="content-section active">
+                <div class="two-column-grid">
+                    <div class="card animate-slide-in">
+                        <h2 class="text-xl font-semibold text-gray-800"><i class="fas fa-microphone mr-2"></i>Record Audio</h2>
+                        <div class="recording-controls">
+                            <button id="startButton" class="btn btn-success"><i class="fas fa-play mr-2"></i>Start Recording</button>
+                            <button id="stopButton" class="btn btn-danger" disabled><i class="fas fa-stop mr-2"></i>Stop Recording</button>
+                            <button id="transcribeButton" class="btn btn-primary" style="display: none;"><i class="fas fa-file-alt mr-2"></i>Transcribe</button>
+                        </div>
+                        <p id="recordingStatus" class="status-message mt-4"></p>
+                        <div id="transcriptionResult" class="transcription-result mt-4"></div>
+                    </div>
+
+                    <div class="card animate-slide-in">
+                        <h2 class="text-xl font-semibold text-gray-800"><i class="fas fa-upload mr-2"></i>Upload Audio</h2>
+                        <div class="form-group">
+                            <label for="audioUploadInput">Choose an audio file:</label>
+                            <input type="file" id="audioUploadInput" accept="audio/*">
+                        </div>
+                        <button id="uploadAndTranscribeButton" class="btn btn-primary" disabled><i class="fas fa-cloud-upload-alt mr-2"></i>Upload & Transcribe</button>
+                        <p id="uploadStatus" class="status-message mt-4"></p>
+                        <div id="uploadTranscriptionResult" class="transcription-result mt-4"></div>
+                    </div>
                 </div>
-                <p id="recordingStatus" class="status-message"></p>
-                <button id="transcribeButton" class="btn btn-primary" style="display: none;">Transcribe Recording</button>
-                <div id="transcriptionResult" class="transcription-result">
-                    </div>
             </section>
 
-            <section class="card">
-                <h2>Upload Audio</h2>
-                <div class="form-group">
-                    <label for="audioUploadInput">Choose an audio file:</label>
-                    <input type="file" id="audioUploadInput" accept="audio/*">
+            <section id="transcriptionSection" class="content-section hidden">
+                <div class="card animate-slide-in full-height-card">
+                    <h2 class="text-xl font-semibold text-gray-800"><i class="fas fa-list mr-2"></i>My Transcriptions</h2>
+                    <ul id="transcriptionList" class="list scrollable-list">
+                        <li>No transcriptions yet.</li>
+                    </ul>
+                    <button id="loadAllTranscriptionsButton" class="btn btn-secondary mt-4"><i class="fas fa-eye mr-2"></i>Show All Transcriptions</button>
                 </div>
-                <button id="uploadAndTranscribeButton" class="btn btn-primary" disabled>Upload & Transcribe</button>
-                <p id="uploadStatus" class="status-message"></p>
-                <div id="uploadTranscriptionResult" class="transcription-result">
-                    </div>
             </section>
 
-            <section class="card">
-                <h2>My Transcriptions</h2>
-                <ul id="transcriptionList" class="list">
-                    <li>No transcriptions yet.</li>
-                </ul>
-                <button id="loadAllTranscriptionsButton" class="btn btn-secondary">Show All Transcriptions</button>
+            <section id="vocabularySection" class="content-section hidden">
+                <div class="card animate-slide-in full-height-card">
+                    <h2 class="text-xl font-semibold text-gray-800"><i class="fas fa-book mr-2"></i>My Vocabulary</h2>
+                    <form id="vocabForm" class="form">
+                        <div class="form-group">
+                            <label for="russianWord">Russian Word</label>
+                            <input type="text" id="russianWord" placeholder="Например: привет" required>
+                        </div>
+                        <div class="form-row-compact">
+                            <button type="button" id="suggestDetailsButton" class="btn btn-secondary compact-btn"><i class="fas fa-lightbulb mr-2"></i>Suggest Translation</button>
+                            
+                            <div class="form-group flex-grow ml-2">
+                                <label for="targetLanguage">Target Language</label>
+                                <select id="targetLanguage" class="form-control">
+                                    <option value="es">Spanish</option>
+                                    <option value="en">English</option>
+                                    <option value="pt">Portuguese</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="translation">Translation</label>
+                            <input type="text" id="translation" placeholder="For example: hello" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleSentence">Comment (optional)</label>
+                            <input type="text" id="exampleSentence" placeholder="For example: Привет, как дела?">
+                        </div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-plus mr-2"></i>Add Vocabulary</button>
+                    </form>
+                    <ul id="vocabList" class="list scrollable-list mt-4">
+                        <li>No vocabulary items yet.</li>
+                    </ul>
+                </div>
             </section>
 
-            <section class="card">
-                <h2>My Vocabulary</h2>
-                <form id="vocabForm" class="form">
+            <section id="grammarSection" class="content-section hidden">
+                <div class="card animate-slide-in full-height-card">
+                    <h2 class="text-xl font-semibold text-gray-800"><i class="fas fa-check-circle mr-2"></i>Grammar Check</h2>
                     <div class="form-group">
-                        <label for="russianWord">Russian Word</label>
-                        <input type="text" id="russianWord" placeholder="Например: привет" required>
+                        <label for="grammarTextInput">Enter text to check:</label>
+                        <textarea id="grammarTextInput" class="form-control" rows="5" placeholder="Type or paste your text here..."></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="targetLanguage">Target Language for Suggestion</label>
-                        <select id="targetLanguage" class="form-control">
-                            <option value="es">Spanish</option>
+                        <label for="transcriptionLanguage">Language for Grammar Check</label>
+                        <select id="transcriptionLanguage" class="form-control">
                             <option value="en">English</option>
+                            <option value="es">Spanish</option>
+                            <option value="ru">Russian</option>
                             <option value="pt">Portuguese</option>
-                            </select>
+                        </select>
                     </div>
-                    <button type="button" id="suggestDetailsButton" class="btn btn-secondary">Suggest Translation & Comment</button>
-                    <div class="form-group">
-                        <label for="translation">Translation</label>
-                        <input type="text" id="translation" placeholder="For example: hello" required>
+                    <button id="correctGrammarButton" class="btn btn-primary mb-4"><i class="fas fa-spell-check mr-2"></i>Correct Grammar</button>
+                    
+                    <div class="grammar-results scrollable-list">
+                        <p id="grammarCorrectionStatus" class="status-message hidden"></p> <div class="grammar-output-group">
+                            <label>Original Text:</label>
+                            <p id="originalGrammarText" class="grammar-text"></p>
+                        </div>
+                        <div class="grammar-output-group">
+                            <label>Corrected Text:</label>
+                            <p id="correctedGrammarText" class="grammar-text font-bold"></p>
+                        </div>
+                        <div class="grammar-output-group">
+                            <label>Explanation:</label>
+                            <p id="grammarExplanation" class="grammar-text"></p>
+                        </div>
+                        <div class="grammar-output-group">
+                            <label>Error Details:</label>
+                            <div id="grammarErrorsDetails" class="grammar-text"></div>
+                        </div>
                     </div>
-                    <!-- <div class="form-group">
-                        <label for="translation">Translation</label>
-                        <input type="text" id="translation" placeholder="For example: hello" required>
-                    </div> -->
-                    <div class="form-group">
-                        <label for="exampleSentence">Add a comment (optional)</label>
-                        <input type="text" id="exampleSentence" placeholder="For example: Привет, как дела?">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Add Vocabulary</button>
-                </form>
-                <ul id="vocabList" class="list">
-                    <li>No vocabulary items yet.</li>
-                </ul>
+                </div>
             </section>
         </main>
+    </div>
+
+    <div id="customModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3 id="modalTitle" class="modal-title"></h3>
+            <p id="modalMessage" class="modal-message"></p>
+            <button id="modalConfirmBtn" class="btn btn-primary">OK</button>
+            <button id="modalCancelBtn" class="btn btn-secondary hidden">Cancel</button>
+        </div>
     </div>
 
     <script src="/static/app.js"></script>

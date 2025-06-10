@@ -1,419 +1,558 @@
-/* static/styles.css */
-
-/* General Body Styling */
-body {
-    font-family: 'Roboto', sans-serif;
+/* General Body and Base Styles */
+html, body {
+    height: 100%;
     margin: 0;
-    padding: 0;
-    background-color: #f4f7f6; /* Light grey background */
-    color: #333; /* Darker text color */
+    overflow: hidden; /* Prevent scrolling on the body for desktop */
+    font-family: 'Inter', sans-serif; /* Using Inter for a modern, professional look */
+    background: linear-gradient(to bottom right, #F8F9FA, #E9ECEF); /* Very light, subtle gradient */
+    color: #343A40; /* Dark gray for main text */
     line-height: 1.6;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; /* Align to top instead of center vertically */
-    min-height: 100vh;
-    padding-top: 50px; /* Add some space from the top */
-}
-
-/* Auth Card Container */
-.auth-card-container {
-    width: 100%;
-    max-width: 450px; /* Max width for auth form */
-    padding: 20px;
-    box-sizing: border-box;
-    display: flex; /* Flexbox for centering auth card */
+    display: flex; /* Use flexbox for body to center auth container */
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 100px); /* Adjust height for auth section */
 }
 
-.auth-card {
-    background-color: #ffffff;
+/* --- Auth Container --- */
+.auth-card-container {
+    max-width: 450px;
+    margin: 50px auto; /* Centered margin */
     padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    width: 100%;
-    max-width: 400px;
-    box-sizing: border-box;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); /* Soft shadow */
+    display: flex; /* Ensure it's flex for potential centering within body */
+    flex-direction: column;
+    align-items: center;
+}
+
+.auth-card h1 {
+    color: #2C3E50; /* Primary dark color */
+    font-weight: 700;
 }
 
 .auth-tabs {
     display: flex;
-    margin-bottom: 25px;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.btn-tab {
-    flex-grow: 1;
-    padding: 12px 0;
-    text-align: center;
-    border: none;
-    background-color: transparent;
-    font-size: 1.1em;
-    font-weight: 500;
-    cursor: pointer;
-    color: #777;
-    transition: color 0.3s ease, border-bottom 0.3s ease;
-    border-radius: 0; /* Remove border-radius for tab effect */
-}
-
-.btn-tab.active {
-    color: #3498db;
-    border-bottom: 3px solid #3498db;
-    font-weight: 700;
-}
-
-.btn-tab:hover:not(.active) {
-    color: #555;
-}
-
-.auth-form h2 {
-    margin-top: 0;
-    margin-bottom: 25px;
-    color: #2c3e50;
-    font-size: 1.8em;
-    text-align: center;
-}
-
-/* Message for login/register status */
-.message {
-    margin-top: 15px;
-    text-align: center;
-    font-weight: 500;
-    padding: 5px;
-    border-radius: 4px;
-}
-
-.message[style*="green"] {
-    background-color: #e6ffe6;
-    color: #27ae60;
-}
-
-.message[style*="red"] {
-    background-color: #ffe6e6;
-    color: #e74c3c;
-}
-
-
-/* Main Application Container */
-.container {
+    justify-content: center;
     width: 100%;
-    max-width: 960px;
-    padding: 20px;
-    box-sizing: border-box;
+    margin-bottom: 25px;
 }
 
-/* Header Styling */
+.auth-form {
+    width: 100%;
+    max-width: 350px; /* Limit form width for better readability */
+    padding-top: 15px;
+}
+
+/* --- App Container (Main Application Layout) --- */
+.app-container {
+    display: flex;
+    flex-direction: column; /* Stack header, nav, main content vertically */
+    height: 100vh; /* Take full viewport height on desktop */
+    width: 100%; /* Take full width */
+    max-width: 1200px; /* Max width for desktop content */
+    background: linear-gradient(to bottom right, #F8F9FA, #E9ECEF); /* Consistent background */
+    color: #343A40;
+    font-family: 'Inter', sans-serif;
+    padding: 20px; /* Overall padding around the app content */
+    box-sizing: border-box; /* Include padding in height calculation */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* Subtle shadow for the main app block */
+    border-radius: 12px; /* Rounded corners for the main app block */
+    overflow: hidden; /* Hide overflow from main app container */
+}
+
+/* Header */
 .header {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    margin-bottom: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #E9ECEF; /* Subtle separator */
+    flex-shrink: 0; /* Prevent header from shrinking */
 }
-
 .header h1 {
-    margin: 0;
-    color: #2c3e50; /* Dark blue heading */
-    font-size: 2em;
+    color: #2C3E50; /* Primary dark color */
     font-weight: 700;
 }
-
-.app-header-controls { /* Use this for general app controls like logout */
+.user-info {
     display: flex;
-    gap: 10px;
+    align-items: center;
+}
+.user-info span {
+    color: #495057;
+    font-size: 0.95rem;
 }
 
+/* Main Navigation Tabs */
+.main-nav {
+    display: flex;
+    justify-content: center; /* Center the navigation tabs */
+    margin-bottom: 20px;
+    flex-shrink: 0; /* Prevent navigation from shrinking */
+    flex-wrap: wrap; /* Allow tabs to wrap on smaller screens */
+    gap: 10px; /* Space between tabs */
+}
 
-/* Main Content Layout */
+.nav-tab {
+    padding: 12px 25px;
+    border: none;
+    background-color: transparent;
+    color: #6C757D;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s ease, border-bottom 0.2s ease;
+    border-bottom: 3px solid transparent; /* For active state */
+    border-radius: 6px 6px 0 0; /* Rounded top corners for tabs */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-tab.active {
+    color: #1F618D;
+    border-bottom-color: #1F618D;
+    font-weight: 700;
+    background-color: #ffffff; /* Active tab has a white background */
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow at the top for active tab */
+}
+
+/* Main Content Area */
 .main-content {
+    flex-grow: 1; /* Allow main content to take remaining space */
+    display: flex; /* Flex container for content sections */
+    flex-direction: column; /* Stack content sections */
+    overflow: hidden; /* Hide overflow from main content container */
+    background-color: #ffffff; /* Content area background */
+    border-radius: 8px; /* Match card radius */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Subtle shadow for the content area */
+    padding: 20px; /* Padding inside the main content area */
+    box-sizing: border-box;
+}
+
+.content-section {
+    display: none; /* Hide all content sections by default */
+    flex-grow: 1; /* Allow content sections to fill space */
+    height: 100%; /* Ensure content sections take full available height */
+    box-sizing: border-box;
+}
+
+.content-section.active {
+    display: flex; /* Show active section */
+    flex-direction: column; /* Allow cards within to stack vertically */
+    overflow: hidden; /* Hide overflow from the section itself */
+}
+
+/* Two-column layout for Audio Tools */
+.two-column-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    gap: 20px; /* Space between columns */
+    height: 100%; /* Take full height of parent section */
+    box-sizing: border-box;
 }
 
-/* Responsive layout for larger screens */
-@media (min-width: 768px) {
-    .main-content {
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    }
-    .card:nth-child(1) { /* Record Audio card */
-        grid-column: span 1;
-    }
-    .card:nth-child(2) { /* My Transcriptions card */
-        grid-column: span 1;
-    }
-    .card:nth-child(3) { /* My Vocabulary card */
-        grid-column: span 2; /* Make vocabulary span full width */
-    }
-}
-
-
-/* Card Styling */
-.card {
-    background-color: #ffffff;
+.two-column-grid > .card {
+    height: 100%; /* Make cards fill their grid cell height */
+    display: flex;
+    flex-direction: column; /* Stack content inside card */
     padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+    overflow-y: auto; /* Allow internal scrolling if card content is too long */
+}
+
+/* Full height cards for Transcriptions and Vocabulary */
+.full-height-card {
+    height: 100%;
     display: flex;
     flex-direction: column;
+    padding: 25px;
+    box-sizing: border-box;
+    overflow: hidden; /* Hide direct overflow from the card */
 }
 
+/* Scrollable lists */
+.scrollable-list {
+    flex-grow: 1; /* Allow lists to take remaining space */
+    overflow-y: auto; /* Make lists scrollable if content overflows */
+    margin-bottom: 15px; /* Space before buttons/forms below the list */
+    padding-right: 10px; /* Prevent scrollbar from overlapping content */
+}
+
+/* General Card Styling */
+.card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Headings within sections */
 .card h2 {
-    color: #34495e; /* Slightly lighter dark blue */
-    margin-top: 0;
+    color: #2C3E50;
+    font-weight: 600;
     margin-bottom: 20px;
-    font-size: 1.5em;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
+    display: flex; /* For icon alignment */
+    align-items: center;
+    flex-shrink: 0; /* Prevent heading from shrinking if content is long */
+}
+.card h2 .fas {
+    color: #1F618D; /* Accent color for icons */
+    margin-right: 10px;
 }
 
-/* Button Styling */
+/* --- Buttons --- */
 .btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
+    padding: 12px 25px;
+    border-radius: 6px;
+    font-weight: 600;
     cursor: pointer;
-    font-size: 1em;
-    font-weight: 700;
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.btn:active {
-    transform: translateY(0);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    white-space: nowrap; /* Prevent text wrapping on buttons */
 }
 
 .btn-primary {
-    background-color: #3498db; /* Blue */
-    color: white;
+    background-color: #1F618D; /* Steel Blue */
+    color: #ffffff;
+    border: 1px solid #1F618D;
 }
-
 .btn-primary:hover {
-    background-color: #2980b9;
+    background-color: #1A5276; /* Slightly darker */
+    box-shadow: 0 4px 12px rgba(31, 97, 141, 0.3);
 }
 
 .btn-secondary {
-    background-color: #95a5a6; /* Grey */
-    color: white;
+    background-color: #6C757D; /* Medium gray */
+    color: #ffffff;
+    border: 1px solid #6C757D;
 }
-
 .btn-secondary:hover {
-    background-color: #7f8c8d;
+    background-color: #5A6268;
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
 }
 
 .btn-success {
-    background-color: #2ecc71; /* Green */
-    color: white;
+    background-color: #28A745; /* Green */
+    color: #ffffff;
+    border: 1px solid #28A745;
 }
-
 .btn-success:hover {
-    background-color: #27ae60;
+    background-color: #218838;
 }
 
 .btn-danger {
-    background-color: #e74c3c; /* Red */
-    color: white;
+    background-color: #DC3545; /* Red */
+    color: #ffffff;
+    border: 1px solid #DC3545;
 }
-
 .btn-danger:hover {
-    background-color: #c0392b;
+    background-color: #C82333;
 }
 
-.btn:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
+.btn-tab {
+    background-color: transparent;
+    color: #6C757D;
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    padding: 10px 15px;
+    margin-right: 10px;
+}
+.btn-tab.active {
+    color: #1F618D;
+    border-bottom-color: #1F618D;
+    font-weight: 700;
 }
 
-/* Form Styling */
+/* --- Form Styles --- */
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 18px;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 5px;
-    font-weight: 400;
-    color: #555;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #495057;
 }
 
 .form-group input[type="text"],
+.form-group input[type="password"],
 .form-group input[type="email"],
-.form-group input[type="password"] {
-    width: calc(100% - 20px); /* Adjust for padding */
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1em;
-    box-sizing: border-box; /* Include padding in width */
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+.form-group input[type="file"],
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #CED4DA;
+    border-radius: 6px;
+    font-size: 1rem;
+    color: #495057;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
 }
 
-.form-group input[type="text"]:focus,
-.form-group input[type="email"]:focus,
-.form-group input[type="password"]:focus {
-    border-color: #3498db;
-    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #80BDFF; /* Bootstrap-like blue on focus */
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
     outline: none;
 }
 
-/* List Styling */
+/* --- List Styles (Transcriptions, Vocabulary) --- */
 .list {
     list-style: none;
     padding: 0;
-    margin-top: 15px;
+    margin-top: 20px;
 }
 
 .list li {
-    background-color: #f8f8f8;
-    border: 1px solid #eee;
-    border-radius: 5px;
-    padding: 12px 15px;
-    margin-bottom: 8px;
+    background-color: #F8F9FA;
+    border: 1px solid #E9ECEF;
+    border-radius: 6px;
+    padding: 15px 20px;
+    margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.95em;
-    color: #444;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    position: relative; /* For delete button positioning */
 }
 
-/* Specific elements styles */
-.recording-controls {
+.list li .delete-btn {
+    background: none;
+    border: none;
+    color: #DC3545;
+    cursor: pointer;
+    font-size: 1.1rem;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.list li .delete-btn:hover {
+    opacity: 1;
+}
+
+/* Status and Message Styling */
+.status-message, .message {
+    margin-top: 15px;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+}
+
+.status-message.success, .message.success {
+    background-color: #D4EDDA;
+    color: #155724;
+    border: 1px solid #C3E6CB;
+}
+
+.status-message.error, .message.error {
+    background-color: #F8D7DA;
+    color: #721C24;
+    border: 1px solid #F5C6CB;
+}
+
+/* Recording indicator */
+.recording-indicator {
+    color: #DC3545;
+    font-weight: 600;
+}
+.recording-indicator::before {
+    content: '• ';
+    color: #DC3545;
+    animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+    0% { opacity: 0.5; }
+    50% { opacity: 1; }
+    100% { opacity: 0.5; }
+}
+
+/* Grammar Check Specific Styles */
+.grammar-output-group {
+    margin-bottom: 15px;
+}
+.grammar-output-group label {
+    font-weight: 600;
+    color: #2C3E50;
+    margin-bottom: 5px;
+    display: block;
+}
+.grammar-text {
+    background-color: #F8F9FA;
+    border: 1px solid #E9ECEF;
+    border-radius: 6px;
+    padding: 10px 15px;
+    min-height: 40px; /* Ensure some height even if empty */
+    white-space: pre-wrap; /* Preserve formatting */
+    word-break: break-word; /* Break long words */
+}
+#grammarErrorsDetails ul {
+    list-style: disc inside;
+    padding-left: 20px;
+    margin-top: 10px;
+}
+#grammarErrorsDetails li {
+    background-color: transparent; /* Override list li background */
+    border: none; /* Override list li border */
+    padding: 5px 0; /* Adjust padding */
+    margin-bottom: 5px;
+    display: list-item; /* Ensure proper list item display */
+}
+
+
+/* --- Custom Modal Styles --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
     display: flex;
-    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it's on top of everything */
+}
+
+.modal-content {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    animation: fadeIn 0.3s ease-out; /* Simple fade-in animation */
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2C3E50;
     margin-bottom: 15px;
 }
 
-.status-message {
-    font-weight: 700;
-    color: #777;
-    margin-top: 10px;
-    min-height: 20px; /* Reserve space */
+.modal-message {
+    font-size: 1rem;
+    color: #495057;
+    margin-bottom: 25px;
 }
 
-.recording-indicator {
-    color: #e74c3c;
-    animation: pulse 1.5s infinite;
+.modal-content .btn {
+    margin: 0 10px;
+    min-width: 100px;
 }
 
-.transcription-result {
-    background-color: #eaf6fd; /* Light blue background for result */
-    border: 1px solid #d4edda;
-    border-radius: 5px;
-    padding: 15px;
-    margin-top: 20px;
-    font-family: 'Roboto Mono', monospace; /* Monospaced font for code */
-    white-space: pre-wrap; /* Preserve whitespace and wrap text */
-    word-wrap: break-word; /* Break long words */
-    color: #2c3e50;
+/* Utility classes */
+.hidden {
+    display: none !important;
 }
-
-.transcription-result p {
-    margin: 0 0 8px 0;
-}
-.transcription-result p:last-child {
-    margin-bottom: 0;
-}
-
-.transcription-result code {
-    display: block; /* Ensures it takes full width and starts on new line */
-    background-color: #dbeaf9; /* Slightly darker background for the code block */
-    padding: 8px;
-    border-radius: 4px;
-    font-size: 0.9em;
-    overflow-x: auto; /* Allow horizontal scrolling for very long lines */
-    white-space: pre-wrap; /* Wrap long lines within the code block */
-}
-
 
 /* Animations */
-@keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
+.animate-slide-in {
+    animation: slideIn 0.5s ease-out forwards;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 
-/* Estilos para el botón de eliminar (más pequeño y con un color más suave) */
-.delete-btn {
-    background-color: #d3d3d3; /* Un gris claro que encaja con el estilo */
-    color: #333; /* Texto oscuro para contraste */
-    border: none;
-    border-radius: 4px;
-    padding: 4px 8px; /* Reducir el padding para hacerlo más pequeño */
-    font-size: 0.8em; /* Tamaño de fuente más pequeño */
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-    margin-left: 10px; /* Separación del texto */
-    flex-shrink: 0; /* Evita que el botón se encoja */
+/* --- Responsive Adjustments --- */
+@media (max-width: 1024px) { /* Adjust breakpoint for larger tablets/laptops */
+    .app-container {
+        padding: 15px;
+    }
+    .two-column-grid {
+        grid-template-columns: 1fr; /* Stack columns on smaller screens */
+        height: auto; /* Allow height to auto-adjust */
+    }
+    .two-column-grid > .card {
+        height: auto; /* Allow cards to grow naturally */
+    }
 }
 
-.delete-btn:hover {
-    background-color: #a0a0a0; /* Un gris un poco más oscuro al pasar el ratón */
-    transform: translateY(-1px); /* Efecto ligero al pasar el ratón */
-}
-
-.delete-btn:active {
-    background-color: #888;
-    transform: translateY(0);
-}
-
-/* Estilo para los elementos de la lista de transcripciones para que el botón esté a la derecha */
-.transcription-item {
-    display: flex; /* Usar flexbox */
-    justify-content: space-between; /* Espacio entre el texto y el botón */
-    align-items: center; /* Alinear verticalmente */
-    padding: 10px; /* Padding ajustado para ser consistente */
-    border-bottom: 1px solid #eee;
-    background-color: #f9f9f9;
-    margin-bottom: 5px;
-    border-radius: 5px;
-}
-
-.transcription-item:last-child {
-    border-bottom: none;
-}
-
-/* Estilo para el contenido de texto dentro de la transcripción */
-.transcription-text-content {
-    flex-grow: 1; /* Permitir que el texto ocupe el espacio restante */
-    word-break: break-word; /* Para que el texto largo se ajuste */
-    margin-right: 10px; /* Espacio entre el texto y el botón */
-}
-
-/* Estilos para el nuevo botón "Show All Transcriptions" */
-#loadAllTranscriptionsButton {
-    background-color: #6c757d; /* Un gris similar a los botones secundarios */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    margin-top: 15px; /* Espacio superior para separarlo de la lista */
-    width: fit-content; /* Ajusta el ancho al contenido */
-    display: block; /* Para que ocupe su propia línea si es necesario */
-    margin-left: auto; /* Centrar el botón si el padre es un flexbox o tiene width fijo */
-    margin-right: auto;
-}
-
-#loadAllTranscriptionsButton:hover {
-    background-color: #5a6268;
-}
-
-#loadAllTranscriptionsButton:active {
-    background-color: #4e555b;
+@media (max-width: 768px) { /* Mobile specific adjustments */
+    body {
+        align-items: flex-start; /* Align body content to top on mobile */
+        overflow-y: auto; /* Allow vertical scrolling on mobile */
+    }
+    .auth-card-container, .app-container {
+        margin: 20px auto;
+        padding: 15px;
+        height: auto; /* Allow scrolling on smaller screens */
+        overflow-y: auto; /* Allow content to push height */
+        border-radius: 8px; /* Slightly less rounded for mobile */
+    }
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+    }
+    .user-info {
+        margin-top: 10px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap; /* Allow username and logout to wrap */
+    }
+    .main-nav {
+        flex-direction: column; /* Stack nav tabs vertically */
+        margin-bottom: 15px;
+        gap: 5px; /* Tighter gap */
+    }
+    .nav-tab {
+        width: 100%;
+        margin: 0; /* Remove horizontal margin */
+        text-align: left;
+        border-radius: 6px; /* Full rounded corners for mobile tabs */
+        border-bottom: none; /* No bottom border for mobile tabs */
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow for mobile tabs */
+    }
+    .nav-tab.active {
+        border-bottom: none; /* No bottom border for active mobile tab */
+        background-color: #1F618D; /* Solid background for active mobile tab */
+        color: #ffffff;
+        box-shadow: 0 2px 8px rgba(31, 97, 141, 0.2);
+    }
+    .main-content {
+        padding: 15px;
+        border-radius: 8px;
+    }
+    .scrollable-list {
+        overflow-y: visible; /* Allow content to push height, then body scrolls */
+        padding-right: 0; /* Remove padding for scrollbar */
+    }
+    .card {
+        padding: 15px;
+    }
+    .recording-controls, .grammar-results, .vocab-form {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .btn {
+        width: 100%; /* Full width buttons on small screens */
+        margin-bottom: 10px;
+    }
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+    }
 }

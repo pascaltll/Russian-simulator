@@ -13,7 +13,8 @@ from database.config import init_db
 # Corrected imports for routers: import the 'router' object directly
 from routers.auth import router as auth_router
 from routers.audio import router as audio_router
-from routers.vocabulary import router as vocabulary_router # This is the crucial fix for the AttributeError
+from routers.vocabulary import router as vocabulary_router
+from routers.grammar import router as grammar_router # ¡AÑADE ESTA LÍNEA!
 
 # from utils.whisper_transcriber import load_whisper_model # REMOVED: No longer needed
 
@@ -49,6 +50,7 @@ app.add_middleware(
 app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(audio_router, prefix="/api/audio", tags=["Audio Transcription"])
 app.include_router(vocabulary_router, prefix="/api/vocabulary", tags=["Vocabulary Management"])
+app.include_router(grammar_router, prefix="/api/grammar", tags=["Grammar Check"]) # ¡AÑADE ESTA LÍNEA!
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 

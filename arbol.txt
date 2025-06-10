@@ -11,9 +11,14 @@
 │       ├── 6d22c99e8da4_add_language_column_to_audio_submissions.py
 │       ├── 93c3eb534cfd_initial_schema_setup.py
 │       ├── __pycache__
+│       │   ├── 0a3958dc0c0e_add_created_at_to_vocabularyitem_with_.cpython-312.pyc
 │       │   ├── 6d22c99e8da4_add_language_column_to_audio_submissions.cpython-312.pyc
 │       │   ├── 93c3eb534cfd_initial_schema_setup.cpython-312.pyc
+│       │   ├── 9d0c3d66e59f_add_created_at_to_vocabularyitem.cpython-312.pyc
+│       │   ├── c71898c2747d_add_created_at_to_vocabularyitem_manual_.cpython-312.pyc
+│       │   ├── e537f26cc96c_add_created_at_to_vocabularyitem_final_.cpython-312.pyc
 │       │   └── fda95a2801b6_add_example_sentence_to_vocabulary_items.cpython-312.pyc
+│       ├── e537f26cc96c_add_created_at_to_vocabularyitem_final_.py
 │       └── fda95a2801b6_add_example_sentence_to_vocabulary_items.py
 ├── alembic.ini
 ├── app.db
@@ -48,6 +53,7 @@
 │   │   └── vocabulary.cpython-312.pyc
 │   ├── audio.py
 │   ├── auth.py
+│   ├── grammar.py
 │   └── vocabulary.py
 ├── salida
 ├── schemas
@@ -56,6 +62,7 @@
 │   │   ├── user.cpython-312.pyc
 │   │   └── vocabulary_item.cpython-312.pyc
 │   ├── audio_submission.py
+│   ├── grammar.py
 │   ├── user.py
 │   └── vocabulary_item.py
 ├── services
@@ -63,6 +70,7 @@
 │   │   ├── auth_service.cpython-312.pyc
 │   │   └── vocabulary_nlp_service.cpython-312.pyc
 │   ├── auth_service.py
+│   ├── grammar_service.py
 │   └── vocabulary_nlp_service.py
 ├── start.sh
 ├── static
@@ -71,15 +79,9 @@
 │   └── styles.css
 ├── telegram_bot
 │   ├── __init__.py
-│   ├── __pycache__
-│   │   └── __init__.cpython-312.pyc
 │   ├── bot.py
 │   └── handlers
 │       ├── __init__.py
-│       ├── __pycache__
-│       │   ├── __init__.cpython-312.pyc
-│       │   ├── audio_handler.cpython-312.pyc
-│       │   └── commands.cpython-312.pyc
 │       ├── audio_handler.py
 │       └── commands.py
 ├── temp_audio
@@ -102,4 +104,4 @@
     │   └── whisper_transcriber.cpython-312.pyc
     └── whisper_transcriber.py
 
-25 directories, 78 files
+23 directories, 82 files
