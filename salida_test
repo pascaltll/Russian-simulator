@@ -5,4 +5,8 @@ plugins: cov-6.1.1, anyio-4.9.0, asyncio-1.0.0
 asyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
 collected 9 items
 
-tests/test_audio.py 
+tests/test_audio.py ..                                                   [ 22%]
+tests/test_auth.py ...                                                   [ 55%]
+tests/test_vocabulary.py ....                                            [100%]
+
+============================== 9 passed in 9.67s ===============================

@@ -12,14 +12,14 @@ import logging
 import os
 import sys
 
-# Add the project root directory to sys.path to allow absolute imports
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(project_root)
-
 # Group 2: Third-party libraries
 from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
+
+# Modify sys.path **after** imports are declared to avoid Pylint C0413 errors
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(project_root)
 
 # Group 3: First-party modules
 from telegram_bot.handlers.commands import (

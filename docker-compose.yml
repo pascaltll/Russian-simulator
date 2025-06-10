@@ -2,32 +2,24 @@ version: '3.8'
 
 services:
   app:
-    # Construye la imagen Docker de la aplicación desde el Dockerfile en el directorio actual
-    build: .
-    # Mapea el puerto 8000 del contenedor al puerto 8000 en tu máquina local
+    build: . # Construye la imagen usando el Dockerfile en el directorio actual
     ports:
-      - "8000:8000"
-    # Monta volúmenes para persistir la base de datos y los archivos de audio temporales
+      - "8000:8000" # Mapea el puerto 8000 del host al puerto 8000 del contenedor
     volumes:
-      # Monta el directorio actual del proyecto en /app dentro del contenedor
-      - .:/app
-      # Monta la base de datos app.db para persistencia
-      - app_db_data:/app/app.db
-      # Monta el directorio temp_audio para persistencia de archivos de audio
-      - temp_audio_data:/app/temp_audio
-    # Reinicia el contenedor si se detiene inesperadamente
-    restart: always
-    # Ejecuta comandos antes de iniciar la aplicación principal
-    # Primero, ejecuta las migraciones de Alembic
-    # Luego, inicia la aplicación Uvicorn
-    command: >
-      bash -c "alembic upgrade head &&
-               uvicorn main:app --host 0.0.0.0 --port 8000"
-    # Carga variables de entorno desde el archivo .env (si lo usas)
-    env_file:
+      # Monta tu directorio actual del host en /app dentro del contenedor para desarrollo.
+      - .:/app 
+      # Monta un volumen persistente para la base de datos SQLite.
+      # Esto asume que tu app.db se crea o se espera que esté en /app/app.db
+      - db_data:/app/app.db # <--- MUY IMPORTANTE PARA LA PERSISTENCIA DE SQLite
+    env_file: # <--- NUEVA LÍNEA: carga variables de entorno desde .env
       - .env
-
-# Define los volúmenes persistentes
+    environment:
+      # Puedes mantener variables de entorno aquí si no quieres que estén en .env
+      # o si son para desarrollo solamente.
+      PYTHONUNBUFFERED: 1 # Útil para ver logs de Python en tiempo real
+      # WHISPER_MODEL_DIR: /app/models # Si necesitas un directorio específico para los modelos de Whisper
+    restart: unless-stopped # Reinicia el contenedor a menos que se detenga manualmente
+    
+# Define el volumen para la persistencia de la base de datos
 volumes:
-  app_db_data:
-  temp_audio_data:
+  db_data: # Este es un volumen nombrado por Docker, los datos se almacenarán en el sistema de archivos de Docker

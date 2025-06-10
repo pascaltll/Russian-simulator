@@ -22,7 +22,7 @@ This web service is designed to help users learn the Russian language. It offers
 * **Password Hashing:** `bcrypt`
 * **JWT Handling:** `PyJWT`
 * **Audio Transcription:** `whisper`
-* **NLP/AI Services:** Custom services for vocabulary suggestions and grammar checks.
+* **NLP/AI Services:** Custom services for vocabulary suggestions and grammar checks (using `language-tool-python`).
 * **Database Migrations:** `Alembic`
 * **Dependency Management:** `pip` with `requirements.txt`
 * **Environment Variables:** `python-dotenv`
@@ -42,6 +42,10 @@ These instructions will help you get your project running on your local machine 
 * **`git`**
 * **Docker Desktop** (or Docker Engine and Docker Compose) if you plan to use Docker.
 
+### Important Notes for First Run
+
+* **Model Downloads:** The `whisper` transcription model and `language-tool-python` grammar data will be downloaded automatically the first time they are used. This may take some time depending on your internet connection.
+
 ### 1. Running with Docker Compose (Recommended)
 
 This is the easiest way to run the entire application, including the database and applying migrations.
@@ -53,20 +57,31 @@ This is the easiest way to run the entire application, including the database an
     ```
     *(Remember to replace `your-username/your-repo-name.git` with your actual repository URL).*
 
-2.  **Create a `.env` file:**
-    In the root of your project, create a file named `.env` and add your environment variables. **Make sure to add `.env` to your `.gitignore` file!**
-    ```env
-    SECRET_KEY="your_very_secret_key_here_please_change_this"
-    ALGORITHM="HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES=30
-    # Add any other environment variables your application needs
-    ```
+2.  **Configure Environment Variables:**
+    * **Create a `.env` file:** In the root of your project, copy the example file `env.example` and rename it to `.env`.
+        ```bash
+        cp env.example .env
+        ```
+    * **Edit `.env`:** Open the newly created `.env` file and fill in your actual values for the variables. **Make sure to add `.env` to your `.gitignore` file to prevent it from being committed to version control!**
+
+        ```env
+        # .env (example values - replace with your own)
+        DATABASE_URL=sqlite:///app.db
+        SECRET_KEY="your_very_secret_key_here_please_generate_a_strong_one" # Generate a strong key, e.g., using: python -c "import os; print(os.urandom(32).hex())"
+        ALGORITHM=HS256
+        ACCESS_TOKEN_EXPIRE_MINUTES=30
+        TELEGRAM_BOT_TOKEN=YOUR_TELEGRAM_BOT_TOKEN_HERE # Replace with your actual Telegram Bot token
+        WHISPER_MODEL_SIZE=base # E.g.: tiny, base, small, medium, large
+        WHISPER_FP16=False # True if your GPU supports FP16, False for CPU or older GPUs
+        ```
 
 3.  **Build and run the Docker containers:**
     ```bash
     docker compose up --build -d
     ```
     The `--build` flag builds the Docker image (necessary the first time or after `Dockerfile`/`requirements.txt` changes). The `-d` flag runs containers in the background.
+
+    **Database Persistence (SQLite):** Your `app.db` database will be persisted using a Docker volume (`db_data`), ensuring your data is not lost when containers are stopped or rebuilt.
 
 4.  **Access the application:**
     Open your web browser and go to `http://localhost:8000/docs` to see the FastAPI interactive API documentation (Swagger UI).
@@ -95,8 +110,9 @@ If you prefer to run the application directly on your machine.
     pip install -r requirements.txt
     ```
 
-4.  **Create a `.env` file:**
-    In the root of the project, create a file named `.env` with your environment variables (as described in the Docker section above).
+4.  **Configure Environment Variables:**
+    * **Create a `.env` file:** In the root of the project, copy the example file `env.example` and rename it to `.env`.
+    * **Edit `.env`:** Open `.env` and fill in your actual values for the variables, as described in the Docker section above.
 
 5.  **Run Alembic database migrations:**
     This sets up your database tables.
@@ -117,7 +133,7 @@ If you prefer to run the application directly on your machine.
 
 ## Secret Management
 
-This project uses `python-dotenv` to load environment variables. All sensitive information (like `SECRET_KEY`) should be stored in a `.env` file at the root of the repository.
+This project uses `python-dotenv` to load environment variables. All sensitive information (like `SECRET_KEY`, `TELEGRAM_BOT_TOKEN`) should be stored in a `.env` file at the root of the repository.
 
 **Important:** Remember to add `.env` to your `.gitignore` file to prevent it from being committed to version control.
 
