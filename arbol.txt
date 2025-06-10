@@ -110,6 +110,7 @@
 │   │   ├── test_audio_2.mp3
 │   │   └── test_audio_3.mp3
 │   ├── conftest.py
+│   ├── test.db
 │   ├── test_audio.py
 │   ├── test_auth.py
 │   └── test_vocabulary.py
@@ -118,4 +119,4 @@
     │   └── whisper_transcriber.cpython-312.pyc
     └── whisper_transcriber.py
 
-25 directories, 94 files
+25 directories, 95 files

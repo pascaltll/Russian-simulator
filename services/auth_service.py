@@ -1,8 +1,10 @@
-# services/auth_service.py
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError, jwt
-from passlib.context import CryptContext
+# from jose import JWTError, jwt # Ya eliminada
+import bcrypt
+# ¡CORRECCIÓN AQUÍ!
+import jwt # Importa la librería PyJWT como 'jwt'
+from jwt.exceptions import PyJWTError # Importa la excepción específica
 from datetime import datetime, timezone, timedelta
 from typing import Optional
 import os
@@ -18,14 +20,13 @@ SECRET_KEY = os.getenv("SECRET_KEY", "your_super_secret_key_change_me")
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
 
-pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/token")
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
 def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
@@ -48,7 +49,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
-    except JWTError:
+    except PyJWTError: # Esto se mantiene igual
         raise credentials_exception
     user = crud.get_by_username(db, username=username)
     if user is None:

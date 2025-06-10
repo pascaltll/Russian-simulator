@@ -1,11 +1,10 @@
-# schemas/user.py
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict # <-- ¡Asegúrate de que ConfigDict esté aquí!
 from typing import Optional
 from datetime import datetime
 
 class UserBase(BaseModel):
     username: str
-    email: Optional[EmailStr] = None # <--- CAMBIO CLAVE: Hacer el email opcional
+    email: Optional[EmailStr] = None
 
 class UserCreate(UserBase):
     password: str
@@ -18,8 +17,8 @@ class UserCreateTelegram(BaseModel):
     email: Optional[EmailStr] = None
     hashed_password: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    # ¡CAMBIO CLAVE AQUÍ!
+    model_config = ConfigDict(from_attributes=True) # Reemplaza 'class Config:'
 
 class UserInDB(UserBase):
     id: int
@@ -29,8 +28,8 @@ class UserInDB(UserBase):
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
 
-    class Config:
-        from_attributes = True
+    # ¡CAMBIO CLAVE AQUÍ!
+    model_config = ConfigDict(from_attributes=True) # Reemplaza 'class Config:'
 
 class Token(BaseModel):
     access_token: str

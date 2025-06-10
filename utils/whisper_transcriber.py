@@ -1,4 +1,3 @@
-# utils/whisper_transcriber.py
 import whisper
 import os
 import logging
@@ -34,7 +33,8 @@ def transcribe_audio_with_whisper(audio_path: str) -> dict: # Changed return typ
 
     try:
         # Perform transcription and language detection
-        result = _model.transcribe(audio_path)
+        # ¡CORRECCIÓN AQUÍ! Pasa fp16=False para decirle que use FP32
+        result = _model.transcribe(audio_path, fp16=False)
         
         # The 'result' object from whisper.transcribe usually contains 'text' and 'language'
         transcription_text = result.get("text", "Transcription not available.")
@@ -46,4 +46,3 @@ def transcribe_audio_with_whisper(audio_path: str) -> dict: # Changed return typ
     except Exception as e:
         logger.error(f"Whisper transcription error: {e}", exc_info=True)
         return {"text": f"Whisper transcription error: {str(e)}", "language": "error"}
-
