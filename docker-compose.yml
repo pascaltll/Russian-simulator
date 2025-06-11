@@ -2,24 +2,44 @@ version: '3.8'
 
 services:
   app:
-    build: . # Construye la imagen usando el Dockerfile en el directorio actual
+    build: . # Construye la imagen Docker desde el Dockerfile en el directorio actual
     ports:
-      - "8000:8000" # Mapea el puerto 8000 del host al puerto 8000 del contenedor
+      - "8000:8000" # Mapea el puerto 8000 del contenedor al puerto 8000 del host
     volumes:
-      # Monta tu directorio actual del host en /app dentro del contenedor para desarrollo.
-      - .:/app 
-      # Monta un volumen persistente para la base de datos SQLite.
-      # Esto asume que tu app.db se crea o se espera que esté en /app/app.db
-      - db_data:/app/app.db # <--- MUY IMPORTANTE PARA LA PERSISTENCIA DE SQLite
-    env_file: # <--- NUEVA LÍNEA: carga variables de entorno desde .env
-      - .env
+      # Monta tu directorio de proyecto local completo en /app dentro del contenedor.
+      # Esto permite que tu código fuente (incluyendo routers, models, etc.) esté disponible
+      # dentro del contenedor y que los cambios en el código se reflejen con --reload.
+      - ./:/app
+      
+      # Monta un volumen de Docker con nombre para la base de datos persistente.
+      # El contenido de 'db_data' se mapeará a /app/database_volume_data dentro del contenedor.
+      # Este montaje tiene prioridad sobre cualquier contenido existente en /app/database_volume_data
+      # que provenga del montaje './:/app'.
+      - db_data:/app/database_volume_data
+      
+      # Monta un volumen de Docker con nombre para la caché de Whisper.
+      # Esto asegura que los modelos descargados de Whisper persistan entre reinicios del contenedor.
+      - whisper_cache:/app/cache
+      
+    env_file:
+      - .env # Carga variables de entorno desde el archivo .env en la raíz del proyecto
+    
     environment:
-      # Puedes mantener variables de entorno aquí si no quieres que estén en .env
-      # o si son para desarrollo solamente.
-      PYTHONUNBUFFERED: 1 # Útil para ver logs de Python en tiempo real
-      # WHISPER_MODEL_DIR: /app/models # Si necesitas un directorio específico para los modelos de Whisper
+      # Sobrescribe la DATABASE_URL del .env (si existiera) para que apunte
+      # a la ruta correcta dentro del contenedor, donde está montado el volumen de la DB.
+      DATABASE_URL: "sqlite:////app/database_volume_data/app.db" 
+      
+      PYTHONUNBUFFERED: 1 # Asegura que la salida de Python no esté buferizada
+      XDG_CACHE_HOME: /app/cache # Establece la variable para la caché de Whisper
+      
     restart: unless-stopped # Reinicia el contenedor a menos que se detenga manualmente
     
-# Define el volumen para la persistencia de la base de datos
+    # Ejecuta el proceso de la aplicación con el UID y GID de tu usuario del host.
+    # Esto ayuda a evitar problemas de permisos con los archivos creados en los volúmenes.
+    # Los valores ":-1000" son valores por defecto si UID/GID no están definidos en tu entorno.
+    user: "${UID:-1000}:${GID:-1000}" 
+
+# Definición de los volúmenes con nombre para persistencia
 volumes:
-  db_data: # Este es un volumen nombrado por Docker, los datos se almacenarán en el sistema de archivos de Docker
+  db_data: # Volumen para la base de datos SQLite
+  whisper_cache: # Volumen para la caché de Whisper

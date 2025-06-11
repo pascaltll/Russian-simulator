@@ -14,7 +14,9 @@ from httpx import AsyncClient  # Corrected import order (C0411)
 AUDIO_FILE_PATH = "tests/audio/test_audio_1.ogg"
 
 @pytest.mark.asyncio
-async def test_transcribe_audio_authenticated(async_client: AsyncClient, auth_headers: dict):
+async def test_transcribe_audio_authenticated(
+    async_client: AsyncClient, auth_headers: dict
+    ):
     """
     Test authenticated audio transcription using an existing audio file.
 
@@ -31,7 +33,8 @@ async def test_transcribe_audio_authenticated(async_client: AsyncClient, auth_he
     media_type = "audio/ogg"
 
     with open(AUDIO_FILE_PATH, "rb") as audio_file:
-        files = {"audio_file": (os.path.basename(AUDIO_FILE_PATH), audio_file, media_type)}
+        files = {"audio_file": (os.path.basename(AUDIO_FILE_PATH),
+                                 audio_file, media_type)}
         response = await async_client.post(
             "/api/audio/transcribe-audio",
             headers=auth_headers,
@@ -67,7 +70,8 @@ async def test_transcribe_audio_unauthenticated(async_client: AsyncClient):
     media_type = "audio/ogg"
 
     with open(AUDIO_FILE_PATH, "rb") as audio_file:
-        files = {"audio_file": (os.path.basename(AUDIO_FILE_PATH), audio_file, media_type)}
+        files = {"audio_file": (os.path.basename(AUDIO_FILE_PATH),
+                                 audio_file, media_type)}
         response = await async_client.post(
             "/api/audio/transcribe-audio",
             files=files

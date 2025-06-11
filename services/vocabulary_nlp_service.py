@@ -24,24 +24,23 @@ class VocabularyNLPService:
     """
 
     _instance = None
+    _initialized = False
 
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
-            cls._instance._initialize()
         return cls._instance
 
-    def _initialize(self):
-        """
-        Initializes the service with supported language models.
-        """
-        self._models: Dict[str, str] = {
-            'es': 'Helsinki-NLP/opus-mt-ru-es',
-            'en': 'Helsinki-NLP/opus-mt-ru-en',
-            'pt': 'Helsinki-NLP/opus-mt-ru-pt',
-            'fr': 'Helsinki-NLP/opus-mt-ru-fr',
-        }
-        self._pipelines: Dict[str, Pipeline] = {}
+    def __init__(self):
+        if not self._initialized:
+            self._models: Dict[str, str] = {
+                'es': 'Helsinki-NLP/opus-mt-ru-es',
+                'en': 'Helsinki-NLP/opus-mt-ru-en',
+                'pt': 'Helsinki-NLP/opus-mt-ru-pt',
+                'fr': 'Helsinki-NLP/opus-mt-ru-fr',
+            }
+            self._pipelines: Dict[str, Pipeline] = {}
+            self._initialized = True
 
     def _get_translation_pipeline(self, target_language: str) -> Pipeline:
         """

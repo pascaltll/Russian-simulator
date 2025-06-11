@@ -17,10 +17,6 @@ from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
 
-# Modify sys.path **after** imports are declared to avoid Pylint C0413 errors
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(project_root)
-
 # Group 3: First-party modules
 from telegram_bot.handlers.commands import (
     start,
@@ -53,9 +49,8 @@ async def main():
     bot_token = os.getenv("TELEGRAM_BOT_TOKEN")
     if not bot_token:
         logger.error(
-            "TELEGRAM_BOT_TOKEN environment variable not set. "
-            "Please set it to run the bot."
-        )
+            "TELEGRAM_BOT_TOKEN environment variable not set. Please set it to run the bot."
+            )
         raise ValueError("TELEGRAM_BOT_TOKEN not found.")
 
     application = Application.builder().token(bot_token).build()
@@ -67,21 +62,13 @@ async def main():
     application.add_handler(CommandHandler("delete_audio", delete_audio_command))
 
     # Register message handlers
-    application.add_handler(
-        MessageHandler(filters.AUDIO & ~filters.COMMAND, handle_audio)
-    )
-    application.add_handler(
-        MessageHandler(filters.VOICE & ~filters.COMMAND, handle_voice)
-    )
-    application.add_handler(
-        MessageHandler(filters.VIDEO | filters.VIDEO_NOTE, handle_video)
-    )
-    application.add_handler(
-        MessageHandler(
-            filters.TEXT & ~filters.COMMAND & filters.Regex(r'📜 My Audios'),
-            my_transcriptions_command
-        )
-    )
+    application.add_handler(MessageHandler(filters.AUDIO & ~filters.COMMAND, handle_audio))
+    application.add_handler(MessageHandler(filters.VOICE & ~filters.COMMAND, handle_voice))
+    application.add_handler(MessageHandler(filters.VIDEO | filters.VIDEO_NOTE, handle_video))
+    application.add_handler(MessageHandler(
+        filters.TEXT & ~filters.COMMAND & filters.Regex(r'📜 My Audios'),
+        my_transcriptions_command
+    ))
 
     logger.info("Bot started. Listening for messages...")
 

@@ -13,8 +13,8 @@
 │       ├── e537f26cc96c_add_created_at_to_vocabularyitem_final_.py
 │       └── fda95a2801b6_add_example_sentence_to_vocabulary_items.py
 ├── alembic.ini
-├── app.db
 ├── arbol.txt
+├── cache
 ├── database
 │   ├── __init__.py
 │   ├── __pycache__
@@ -25,7 +25,10 @@
 │   ├── base_class.py
 │   ├── config.py
 │   └── crud.py
+├── database_volume_data
+│   └── app.db
 ├── docker-compose.yml
+├── env.example
 ├── main.py
 ├── models
 │   ├── __init__.py
@@ -38,6 +41,7 @@
 │   ├── user.py
 │   └── vocabulary_item.py
 ├── pylint.txt
+├── req.py
 ├── requirements.txt
 ├── routers
 │   ├── __pycache__
@@ -118,4 +122,4 @@
     │   └── whisper_transcriber.cpython-312.pyc
     └── whisper_transcriber.py
 
-25 directories, 94 files
+27 directories, 96 files

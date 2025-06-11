@@ -19,7 +19,7 @@ load_dotenv()
 
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "sqlite:///./app.db"
+    "sqlite:///./database_volume_data/app.db" 
 )
 
 ENGINE = create_engine(
