@@ -230,7 +230,10 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
             await context.bot.send_message(user_id, "Unrecognized video type.")
             return
 
-        audio_path, video_path = await _extract_audio_from_video(video_file, user_id, video_extension)
+        audio_path, video_path = await _extract_audio_from_video(
+            video_file, user_id,
+            video_extension
+            )
         await _process_audio_transcription(update, audio_path, user_id, progress_message)
 
     except (telegram.error.TelegramError, OSError, ValueError) as exc:

@@ -52,10 +52,10 @@ This is the easiest way to run the entire application, including the database an
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/your-username/your-repo-name.git](https://github.com/your-username/your-repo-name.git)
-    cd your-repo-name
+    git clone [https://github.com/pascaltll/Russian-simulator.git)
+    cd Russian-simulator
     ```
-    *(Remember to replace `your-username/your-repo-name.git` with your actual repository URL).*
+
 
 2.  **Configure Environment Variables:**
     * **Create a `.env` file:** In the root of your project, copy the example file `env.example` and rename it to `.env`.
@@ -66,11 +66,11 @@ This is the easiest way to run the entire application, including the database an
 
         ```env
         # .env (example values - replace with your own)
-        DATABASE_URL=sqlite:///app.db
+        DATABASE_URL=sqlite:///./database_volume_data/app.db
         SECRET_KEY="your_very_secret_key_here_please_generate_a_strong_one" # Generate a strong key, e.g., using: python -c "import os; print(os.urandom(32).hex())"
         ALGORITHM=HS256
         ACCESS_TOKEN_EXPIRE_MINUTES=30
-        TELEGRAM_BOT_TOKEN=YOUR_TELEGRAM_BOT_TOKEN_HERE # Replace with your actual Telegram Bot token
+        TELEGRAM_BOT_TOKEN=YOUR_TELEGRAM_BOT_TOKEN_HERE # Replace with your actual 
         WHISPER_MODEL_SIZE=base # E.g.: tiny, base, small, medium, large
         WHISPER_FP16=False # True if your GPU supports FP16, False for CPU or older GPUs
         ```
@@ -92,8 +92,8 @@ If you prefer to run the application directly on your machine.
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/your-username/your-repo-name.git](https://github.com/your-username/your-repo-name.git)
-    cd your-repo-name
+    git clone [https://github.com/pascaltll/Russian-simulator.git)
+    cd Russian-simulator
     ```
 
 2.  **Create and activate a Python virtual environment:**
@@ -129,13 +129,7 @@ If you prefer to run the application directly on your machine.
 7.  **Access the application:**
     Open your web browser and go to `http://localhost:8000/docs`.
 
----
 
-## Secret Management
-
-This project uses `python-dotenv` to load environment variables. All sensitive information (like `SECRET_KEY`, `TELEGRAM_BOT_TOKEN`) should be stored in a `.env` file at the root of the repository.
-
-**Important:** Remember to add `.env` to your `.gitignore` file to prevent it from being committed to version control.
 
 ---
 
@@ -168,5 +162,4 @@ To run the tests:
     PYTHONPATH=$(pwd) pytest
     ```
     All tests should pass without errors or warnings.
-
 ---

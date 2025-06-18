@@ -48,8 +48,7 @@ async def test_transcribe_audio_authenticated(
     json_response = response.json()
     assert "original_transcript" in json_response
     assert isinstance(json_response["original_transcript"], str)
-
-    # W1203: Use lazy % formatting in logging functions - Not applicable to print, but for consistency.
+    # W1203: Use lazy % formatting in logging functions
     print(f"Transcribed Text: {json_response['original_transcript']}")
 
 

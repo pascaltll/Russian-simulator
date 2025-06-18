@@ -45,7 +45,6 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Username already registered"
         )
-    
     hashed_password = get_password_hash(user.password)
     new_user = crud.create_user(db=db, user=user, hashed_password=hashed_password)
     return new_user
