@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * @returns {Promise<boolean>} Resolves to true if confirmed, false if cancelled.
      */
     function showCustomModal(title, message, isConfirm = false) {
-        console.log(`[Modal] Mostrando modal: "${title}" - "${message}" (Confirmación: ${isConfirm})`); // DEBUG
+        console.log(`[Modal] Showing modal: "${title}" - "${message}" (Confirmation: ${isConfirm})`); // DEBUG
         modalTitle.textContent = title;
         modalMessage.textContent = message;
         customModal.classList.remove('hidden');
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalCancelBtn.classList.toggle('hidden', !isConfirm);
 
             currentConfirmHandler = () => {
-                console.log(`[Modal] Confirmado: "${title}"`); // DEBUG
+                console.log(`[Modal] Confirmed: "${title}"`); // DEBUG
                 customModal.classList.add('hidden');
                 resolve(true);
             };
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (isConfirm) {
                 currentCancelHandler = () => {
-                    console.log(`[Modal] Cancelado: "${title}"`); // DEBUG
+                    console.log(`[Modal] Cancelled: "${title}"`); // DEBUG
                     customModal.classList.add('hidden');
                     resolve(false);
                 };
@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * @throws {Error} If the response status is 401 or 403, indicating unauthorized access.
      */
     async function fetchWithAuth(url, options = {}) {
-        console.log(`[API] Solicitud a: ${url} (Método: ${options.method || 'GET'})`); // DEBUG
+        console.log(`[API] Requesting: ${url} (Method: ${options.method || 'GET'})`); // DEBUG
         const token = localStorage.getItem('token');
         const headers = {
             ...options.headers,
@@ -141,14 +141,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const response = await fetch(url, { ...options, headers });
         if (response.status === 401 || response.status === 403) {
-            console.warn('[API] Acceso no autorizado, redirigiendo a login.'); // DEBUG
-            await showCustomModal('Sesión Expirada', 'Tu sesión ha expirado. Por favor, inicia sesión de nuevo.');
+            console.warn('[API] Unauthorized access, redirecting to login.'); // DEBUG
+            await showCustomModal('Session Expired', 'Your session has expired. Please log in again.');
             localStorage.removeItem('token');
             localStorage.removeItem('username');
             checkAuthenticationAndRenderUI();
             throw new Error('Unauthorized'); // Stop further processing
         }
-        console.log(`[API] Respuesta de ${url}: HTTP ${response.status}`); // DEBUG
+        console.log(`[API] Response from ${url}: HTTP ${response.status}`); // DEBUG
         return response;
     }
 
@@ -211,18 +211,18 @@ document.addEventListener('DOMContentLoaded', () => {
             authContainer.style.display = 'none';
             appContainer.style.display = 'flex';
             if (username) {
-                loggedInUsernameSpan.textContent = `¡Bienvenido, ${username}!`;
+                loggedInUsernameSpan.textContent = `Welcome, ${username}!`;
             }
 
             showAppSection('audioSection'); // Show audio tools by default
-            console.log('[Auth] Usuario autenticado, cargando datos iniciales...'); // DEBUG
-            await loadTranscriptions(false); // Asegurarse de que se cargan las transcripciones
-            await loadVocabulary(); // Asegurarse de que se carga el vocabulario
+            console.log('[Auth] User authenticated, loading initial data...'); // DEBUG
+            await loadTranscriptions(false); // Ensure transcriptions are loaded
+            await loadVocabulary(); // Ensure vocabulary is loaded
         } else {
             authContainer.style.display = 'flex';
             appContainer.style.display = 'none';
             showAuthSection('loginForm');
-            console.log('[Auth] Usuario no autenticado, mostrando pantalla de login.'); // DEBUG
+            console.log('[Auth] User not authenticated, showing login screen.'); // DEBUG
         }
     }
 
@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const username = loginUsernameInput.value;
         const password = loginPasswordInput.value;
         loginMessage.textContent = '';
-        console.log('[Auth] Intentando iniciar sesión...'); // DEBUG
+        console.log('[Auth] Attempting to log in...'); // DEBUG
 
         try {
             const response = await fetch('/api/auth/token', {
@@ -246,20 +246,20 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok) {
                 localStorage.setItem('token', result.access_token);
                 localStorage.setItem('username', username);
-                loginMessage.textContent = '¡Inicio de sesión exitoso!';
+                loginMessage.textContent = 'Login successful!';
                 loginMessage.classList.remove('error');
                 loginMessage.classList.add('success');
                 checkAuthenticationAndRenderUI();
-                console.log('[Auth] Inicio de sesión exitoso.'); // DEBUG
+                console.log('[Auth] Login successful.'); // DEBUG
             } else {
-                loginMessage.textContent = `Fallo al iniciar sesión: ${result.detail || 'Credenciales inválidas. Intenta de nuevo.'}`;
+                loginMessage.textContent = `Login failed: ${result.detail || 'Invalid credentials. Please try again.'}`;
                 loginMessage.classList.remove('success');
                 loginMessage.classList.add('error');
-                console.error('[Auth] Fallo al iniciar sesión:', result.detail); // DEBUG
+                console.error('[Auth] Login failed:', result.detail); // DEBUG
             }
         } catch (error) {
-            console.error('[Auth] Error de red durante el inicio de sesión:', error); // DEBUG
-            loginMessage.textContent = 'Error de red. No se pudo iniciar sesión.';
+            console.error('[Auth] Network error during login:', error); // DEBUG
+            loginMessage.textContent = 'Network error. Could not log in.';
             loginMessage.classList.remove('success');
             loginMessage.classList.add('error');
         }
@@ -272,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const email = registerEmailInput.value.trim() === '' ? null : registerEmailInput.value.trim();
         const password = registerPasswordInput.value;
         registerMessage.textContent = '';
-        console.log('[Auth] Intentando registrar usuario...'); // DEBUG
+        console.log('[Auth] Attempting to register user...'); // DEBUG
 
         try {
             const response = await fetch('/api/auth/register', {
@@ -282,24 +282,24 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             const result = await response.json();
             if (response.ok) {
-                showCustomModal('Éxito', '¡Usuario registrado exitosamente! Por favor, inicia sesión.').then(() => {
+                showCustomModal('Success', 'User registered successfully! Please log in.').then(() => {
                     registerMessage.textContent = ''; // Clear message after modal
                     registerForm.reset();
                     showAuthSection('loginForm');
                 });
-                console.log('[Auth] Registro exitoso.'); // DEBUG
+                console.log('[Auth] Registration successful.'); // DEBUG
             } else {
                 const errorMessage = result.detail ?
                                         (Array.isArray(result.detail) ? result.detail.map(d => d.msg).join(', ') : result.detail) :
-                                        'Por favor, intenta de nuevo.';
-                registerMessage.textContent = `Fallo en el registro: ${errorMessage}`;
+                                        'Please try again.';
+                registerMessage.textContent = `Registration failed: ${errorMessage}`;
                 registerMessage.classList.remove('success');
                 registerMessage.classList.add('error');
-                console.error('[Auth] Fallo en el registro:', result.detail); // DEBUG
+                console.error('[Auth] Registration failed:', result.detail); // DEBUG
             }
         } catch (error) {
-            console.error('[Auth] Error de red durante el registro:', error); // DEBUG
-            registerMessage.textContent = 'Error de red. No se pudo registrar el usuario.';
+            console.error('[Auth] Network error during registration:', error); // DEBUG
+            registerMessage.textContent = 'Network error. Could not register user.';
             registerMessage.classList.remove('success');
             registerMessage.classList.add('error');
         }
@@ -307,13 +307,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Logout Functionality
     logoutButton.addEventListener('click', async () => {
-        console.log('[Logout] Botón de cerrar sesión clicado.'); // DEBUG
-        const confirmed = await showCustomModal('Confirmar Cierre de Sesión', '¿Estás seguro de que quieres cerrar sesión?', true);
+        console.log('[Logout] Logout button clicked.'); // DEBUG
+        const confirmed = await showCustomModal('Confirm Logout', 'Are you sure you want to log out?', true);
         if (confirmed) {
-            console.log('[Logout] Cierre de sesión confirmado por el usuario.'); // DEBUG
+            console.log('[Logout] Logout confirmed by user.'); // DEBUG
             localStorage.removeItem('token');
             localStorage.removeItem('username');
-            console.log('[Logout] Token y nombre de usuario eliminados de localStorage.'); // DEBUG
+            console.log('[Logout] Token and username removed from localStorage.'); // DEBUG
             
             // Verify localStorage is indeed empty
             console.log('Current token in localStorage:', localStorage.getItem('token')); // DEBUG
@@ -324,24 +324,24 @@ document.addEventListener('DOMContentLoaded', () => {
             // Clear UI elements explicitly for a clean logout state
             transcriptionResult.innerHTML = '';
             uploadTranscriptionResult.innerHTML = '';
-            transcriptionList.innerHTML = '<li>No hay transcripciones todavía.</li>';
-            vocabList.innerHTML = '<li>No hay elementos de vocabulario todavía.</li>';
+            transcriptionList.innerHTML = '<li>No transcriptions yet.</li>';
+            vocabList.innerHTML = '<li>No vocabulary items yet.</li>';
             
-            showCustomModal('Sesión Cerrada', 'Has cerrado sesión exitosamente.');
-            console.log('[Logout] Sesión cerrada completamente.'); // DEBUG
+            showCustomModal('Logged Out', 'You have been logged out successfully.');
+            console.log('[Logout] Session fully closed.'); // DEBUG
         } else {
-            console.log('[Logout] Cierre de sesión cancelado.'); // DEBUG
+            console.log('[Logout] Logout cancelled.'); // DEBUG
         }
     });
 
     // Switch between Login and Register forms
     showLoginButton.addEventListener('click', () => {
         showAuthSection('loginForm');
-        console.log('[UI] Cambiando a formulario de login.'); // DEBUG
+        console.log('[UI] Switching to login form.'); // DEBUG
     });
     showRegisterButton.addEventListener('click', () => {
         showAuthSection('registerForm');
-        console.log('[UI] Cambiando a formulario de registro.'); // DEBUG
+        console.log('[UI] Switching to registration form.'); // DEBUG
     });
 
     // --- Main Navigation Tab Logic ---
@@ -349,7 +349,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tab.addEventListener('click', () => {
             const targetId = tab.dataset.target;
             showAppSection(targetId);
-            console.log(`[UI] Cambiando a sección: ${targetId}`); // DEBUG
+            console.log(`[UI] Switching to section: ${targetId}`); // DEBUG
         });
     });
 
@@ -363,25 +363,25 @@ document.addEventListener('DOMContentLoaded', () => {
     async function handleTranscriptionResponse(response, resultElement, statusElement = null) {
         const result = await response.json();
         if (response.ok) {
-            console.log('[Audio] Transcripción exitosa, recargando transcripciones...'); // DEBUG
+            console.log('[Audio] Transcription successful, reloading transcriptions...'); // DEBUG
             const detectedLanguage = result.language ? result.language.toUpperCase() : 'Unknown';
             resultElement.innerHTML = `
-                <p><strong>Resultado de la Transcripción</strong></p>
-                <p><strong>Idioma Detectado:</strong> ${detectedLanguage}</p>
+                <p><strong>Transcription Result</strong></p>
+                <p><strong>Detected Language:</strong> ${detectedLanguage}</p>
                 <p><code>${result.original_transcript}</code></p>
             `;
             if (statusElement) {
-                statusElement.textContent = '¡Transcripción exitosa!';
+                statusElement.textContent = 'Transcription successful!';
                 statusElement.classList.remove('error');
                 statusElement.classList.add('success');
             }
-            await loadTranscriptions(false); // Asegurarse de que esta función se complete
-            console.log('[Audio] Transcripciones recargadas después de nueva transcripción.'); // DEBUG
+            await loadTranscriptions(false); // Ensure this function completes
+            console.log('[Audio] Transcriptions reloaded after new transcription.'); // DEBUG
         } else {
-            console.error("[Audio] Fallo en la transcripción (estado HTTP:", response.status, "):", result.detail); // DEBUG
-            resultElement.innerHTML = `<p style="color: red;">Error: ${result.detail || 'Error desconocido'}</p>`;
+            console.error("[Audio] Transcription failed (HTTP status:", response.status, "):", result.detail); // DEBUG
+            resultElement.innerHTML = `<p style="color: red;">Error: ${result.detail || 'Unknown error'}</p>`;
             if (statusElement) {
-                statusElement.textContent = 'Fallo en la transcripción.';
+                statusElement.textContent = 'Transcription failed.';
                 statusElement.classList.remove('success');
                 statusElement.classList.add('error');
             }
@@ -392,7 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Recording Logic ---
 
     startButton.addEventListener('click', async () => {
-        console.log('[Audio] Iniciando grabación...'); // DEBUG
+        console.log('[Audio] Starting recording...'); // DEBUG
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             mediaRecorder = new MediaRecorder(stream);
@@ -401,7 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
             startButton.disabled = true;
             stopButton.disabled = false;
             transcribeButton.style.display = 'none';
-            recordingStatus.textContent = 'Grabando...';
+            recordingStatus.textContent = 'Recording...';
             recordingStatus.classList.add('recording-indicator');
             transcriptionResult.innerHTML = '';
 
@@ -411,9 +411,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
                 const formData = new FormData();
                 formData.append('audio_file', audioBlob, 'recording.webm');
-                console.log('[Audio] Grabación detenida. Archivo de audio listo para transcribir.'); // DEBUG
+                console.log('[Audio] Recording stopped. Audio file ready for transcription.'); // DEBUG
 
-                recordingStatus.textContent = 'Grabación detenida.';
+                recordingStatus.textContent = 'Recording stopped.';
                 recordingStatus.classList.remove('recording-indicator');
                 startButton.disabled = false;
                 stopButton.disabled = true;
@@ -421,8 +421,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Assign the transcribe function to the button click
                 transcribeButton.onclick = async () => {
-                    transcriptionResult.innerHTML = '<p>Transcribiendo...</p>';
-                    console.log('[Audio] Iniciando transcripción de audio grabado...'); // DEBUG
+                    transcriptionResult.innerHTML = '<p>Transcribing...</p>';
+                    console.log('[Audio] Starting transcription of recorded audio...'); // DEBUG
                     try {
                         const response = await fetchWithAuth('/api/audio/transcribe-audio', {
                             method: 'POST',
@@ -430,8 +430,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         });
                         await handleTranscriptionResponse(response, transcriptionResult);
                     } catch (error) {
-                        transcriptionResult.innerHTML = `<p style="color: red;">Error de Red: ${error.message}</p>`;
-                        console.error('[Audio] Error de fetch durante la transcripción:', error); // DEBUG
+                        transcriptionResult.innerHTML = `<p style="color: red;">Network Error: ${error.message}</p>`;
+                        console.error('[Audio] Fetch error during transcription:', error); // DEBUG
                     } finally {
                         transcribeButton.style.display = 'none';
                     }
@@ -439,16 +439,16 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             mediaRecorder.start();
         } catch (error) {
-            console.error('[Audio] Error al acceder al micrófono:', error); // DEBUG
-            recordingStatus.textContent = 'Error: Acceso al micrófono denegado.';
-            showCustomModal('Error de Acceso al Micrófono', 'Error al acceder al micrófono. Por favor, permite el acceso al micrófono en la configuración de tu navegador.');
+            console.error('[Audio] Error accessing microphone:', error); // DEBUG
+            recordingStatus.textContent = 'Error: Microphone access denied.';
+            showCustomModal('Microphone Access Error', 'Error accessing microphone. Please allow microphone access in your browser settings.');
         }
     });
 
     stopButton.addEventListener('click', () => {
         if (mediaRecorder && mediaRecorder.state !== 'inactive') {
             mediaRecorder.stop();
-            console.log('[Audio] Botón de detener grabación clicado.'); // DEBUG
+            console.log('[Audio] Stop recording button clicked.'); // DEBUG
         }
     });
 
@@ -456,29 +456,29 @@ document.addEventListener('DOMContentLoaded', () => {
     audioUploadInput.addEventListener('change', () => {
         if (audioUploadInput.files.length > 0) {
             uploadAndTranscribeButton.disabled = false;
-            uploadStatus.textContent = `Archivo seleccionado: ${audioUploadInput.files[0].name}`;
+            uploadStatus.textContent = `File selected: ${audioUploadInput.files[0].name}`;
             uploadTranscriptionResult.innerHTML = '';
-            console.log(`[Audio] Archivo seleccionado para subir: ${audioUploadInput.files[0].name}`); // DEBUG
+            console.log(`[Audio] File selected for upload: ${audioUploadInput.files[0].name}`); // DEBUG
         } else {
             uploadAndTranscribeButton.disabled = true;
-            uploadStatus.textContent = 'Ningún archivo seleccionado.';
-            console.log('[Audio] Ningún archivo seleccionado para subir.'); // DEBUG
+            uploadStatus.textContent = 'No file selected.';
+            console.log('[Audio] No file selected for upload.'); // DEBUG
         }
     });
 
     uploadAndTranscribeButton.addEventListener('click', async () => {
         const file = audioUploadInput.files[0];
         if (!file) {
-            uploadStatus.textContent = 'Por favor, selecciona primero un archivo de audio.';
+            uploadStatus.textContent = 'Please select an audio file first.';
             uploadStatus.classList.add('error');
             return;
         }
 
-        uploadStatus.textContent = 'Subiendo y transcribiendo...';
+        uploadStatus.textContent = 'Uploading and transcribing...';
         uploadStatus.classList.remove('error', 'success');
         uploadAndTranscribeButton.disabled = true;
         uploadTranscriptionResult.innerHTML = '';
-        console.log('[Audio] Iniciando subida y transcripción de audio.'); // DEBUG
+        console.log('[Audio] Starting audio upload and transcription.'); // DEBUG
 
         const formData = new FormData();
         formData.append('audio_file', file);
@@ -490,15 +490,15 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             await handleTranscriptionResponse(response, uploadTranscriptionResult, uploadStatus);
         } catch (error) {
-            uploadTranscriptionResult.innerHTML = `<p style="color: red;">Error de Red: ${error.message}</p>`;
-            uploadStatus.textContent = 'Error de red durante la subida.';
+            uploadTranscriptionResult.innerHTML = `<p style="color: red;">Network Error: ${error.message}</p>`;
+            uploadStatus.textContent = 'Network error during upload.';
             uploadStatus.classList.remove('success');
             uploadStatus.classList.add('error');
-            console.error('[Audio] Error de fetch durante la transcripción de subida:', error); // DEBUG
+            console.error('[Audio] Fetch error during upload transcription:', error); // DEBUG
         } finally {
             uploadAndTranscribeButton.disabled = false;
             audioUploadInput.value = null; // Clear file input
-            console.log('[Audio] Subida y transcripción de audio finalizada.'); // DEBUG
+            console.log('[Audio] Audio upload and transcription finished.'); // DEBUG
         }
     });
 
@@ -534,40 +534,40 @@ document.addEventListener('DOMContentLoaded', () => {
     if (correctGrammarButton) {
         correctGrammarButton.addEventListener('click', async () => {
             clearGrammarResults();
-            showGrammarStatus('Comprobando gramática...', false);
-            console.log('[Grammar] Iniciando comprobación de gramática...'); // DEBUG
+            showGrammarStatus('Checking grammar...', false);
+            console.log('[Grammar] Starting grammar check...'); // DEBUG
 
             let textToCorrect = grammarTextInput.value.trim();
-            console.log(`[Grammar] Texto inicial en grammarTextInput: "${textToCorrect}"`); // DEBUG
+            console.log(`[Grammar] Initial text in grammarTextInput: "${textToCorrect}"`); // DEBUG
 
             if (!textToCorrect) {
                 // If input field is empty, try to get from last transcription result
                 const lastTranscriptionCodeElement = transcriptionResult.querySelector('code');
                 if (lastTranscriptionCodeElement) {
                     textToCorrect = lastTranscriptionCodeElement.textContent.trim();
-                    console.log(`[Grammar] Texto tomado de transcriptionResult: "${textToCorrect}"`); // DEBUG
+                    console.log(`[Grammar] Text taken from transcriptionResult: "${textToCorrect}"`); // DEBUG
                 } else {
                     // If no transcription in audioSection, try from the first item in the transcription list
                     const firstTranscriptionInList = transcriptionList.querySelector('.transcription-item code');
                     if (firstTranscriptionInList) {
                         textToCorrect = firstTranscriptionInList.textContent.trim();
-                        console.log(`[Grammar] Texto tomado de la primera transcripción en la lista: "${textToCorrect}"`); // DEBUG
+                        console.log(`[Grammar] Text taken from the first transcription in the list: "${textToCorrect}"`); // DEBUG
                     } else {
-                        console.log('[Grammar] No se encontró texto en transcriptionResult ni en la lista de transcripciones.'); // DEBUG
+                        console.log('[Grammar] No text found in transcriptionResult or in the transcription list.'); // DEBUG
                     }
                 }
             }
 
             const language = transcriptionLanguageSelect.value;
-            console.log(`[Grammar] Idioma seleccionado para la comprobación: "${language}"`); // DEBUG
+            console.log(`[Grammar] Selected language for check: "${language}"`); // DEBUG
 
             if (!textToCorrect) {
-                showGrammarStatus('No se encontró texto para revisar la gramática. Por favor, escribe texto, graba o sube audio primero.', true);
-                console.warn('[Grammar] No hay texto para revisar la gramática. Deteniendo operación.'); // DEBUG
+                showGrammarStatus('No text found to check grammar. Please type text, record, or upload audio first.', true);
+                console.warn('[Grammar] No text to check grammar. Stopping operation.'); // DEBUG
                 return;
             }
 
-            console.log(`[Grammar] Enviando texto para corregir: "${textToCorrect}" con idioma: "${language}"`); // DEBUG
+            console.log(`[Grammar] Sending text for correction: "${textToCorrect}" with language: "${language}"`); // DEBUG
 
             try {
                 const response = await fetchWithAuth('/api/grammar/check', {
@@ -580,48 +580,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (response.ok) {
                     const result = await response.json();
-                    showGrammarStatus('¡Comprobación de gramática completada!', false);
-                    console.log('[Grammar] Comprobación de gramática exitosa. Resultado de la API:', result); // DEBUG
+                    showGrammarStatus('Grammar check completed!', false);
+                    console.log('[Grammar] Grammar check successful. API Result:', result); // DEBUG
 
                     originalGrammarTextSpan.textContent = result.original_text || 'N/A';
                     correctedGrammarTextSpan.textContent = result.corrected_text || 'N/A';
-                    grammarExplanationSpan.textContent = result.explanation || 'No se proporcionó una explicación específica.';
+                    grammarExplanationSpan.textContent = result.explanation || 'No specific explanation provided.';
 
                     grammarErrorsDetailsDiv.innerHTML = '';
                     if (result.errors && result.errors.length > 0) {
-                        console.log('[Grammar] Errores detectados:', result.errors); // DEBUG
+                        console.log('[Grammar] Errors detected:', result.errors); // DEBUG
                         const errorList = document.createElement('ul');
                         result.errors.forEach(error => {
                             const errorLi = document.createElement('li'); // Changed to li for list (Pylint equivalent: C0103)
                             errorLi.innerHTML = `<strong>Error:</strong> ${error.message || 'N/A'}<br>`;
-                            errorLi.innerHTML += `<strong>Texto problemático:</strong> "${error.bad_word || 'N/A'}"<br>`;
+                            errorLi.innerHTML += `<strong>Problematic text:</strong> "${error.bad_word || 'N/A'}"<br>`;
                             if (error.suggestions && error.suggestions.length > 0) {
-                                errorLi.innerHTML += `<strong>Sugerencias:</strong> ${error.suggestions.join(', ')}<br>`;
+                                errorLi.innerHTML += `<strong>Suggestions:</strong> ${error.suggestions.join(', ')}<br>`;
                             }
                             errorList.appendChild(errorLi);
                         });
                         grammarErrorsDetailsDiv.appendChild(errorList);
                     } else {
-                        grammarErrorsDetailsDiv.textContent = "No se detectaron errores específicos o son menores.";
-                        console.log('[Grammar] No se detectaron errores específicos.'); // DEBUG
+                        grammarErrorsDetailsDiv.textContent = "No specific errors detected or they are minor.";
+                        console.log('[Grammar] No specific errors detected.'); // DEBUG
                     }
 
                 } else {
                     const errorResult = await response.json();
-                    showGrammarStatus(`Error al revisar la gramática: ${errorResult.detail || 'No se pudo revisar la gramática.'}`, true);
+                    showGrammarStatus(`Error checking grammar: ${errorResult.detail || 'Could not check grammar.'}`, true);
                     originalGrammarTextSpan.textContent = '';
                     correctedGrammarTextSpan.textContent = '';
                     grammarExplanationSpan.textContent = '';
-                    grammarErrorsDetailsDiv.innerHTML = 'Fallo al cargar detalles de la gramática.';
-                    console.error('[Grammar] Error de API al revisar la gramática. Estado HTTP:', response.status, 'Detalles:', errorResult); // DEBUG
+                    grammarErrorsDetailsDiv.innerHTML = 'Failed to load grammar details.';
+                    console.error('[Grammar] API error checking grammar. HTTP Status:', response.status, 'Details:', errorResult); // DEBUG
                 }
             } catch (error) {
-                console.error('[Grammar] Error de red o durante el procesamiento de la revisión gramatical:', error); // DEBUG
-                showGrammarStatus('Error de red. No se pudo revisar la gramática.', true);
+                console.error('[Grammar] Network or processing error during grammar check:', error); // DEBUG
+                showGrammarStatus('Network error. Could not check grammar.', true);
                 originalGrammarTextSpan.textContent = '';
                 correctedGrammarTextSpan.textContent = '';
                 grammarExplanationSpan.innerHTML = '';
-                grammarErrorsDetailsDiv.innerHTML = 'Fallo al cargar detalles de la gramática.';
+                grammarErrorsDetailsDiv.innerHTML = 'Failed to load grammar details.';
             }
         });
     }
@@ -632,284 +632,4 @@ document.addEventListener('DOMContentLoaded', () => {
     if (suggestDetailsButton) {
         suggestDetailsButton.addEventListener('click', async () => {
             const russianWord = russianWordInput.value.trim();
-            const targetLanguage = targetLanguageSelect.value;
-
-            if (!russianWord) {
-                showCustomModal('Entrada Requerida', 'Por favor, introduce una palabra en ruso para obtener sugerencias.');
-                return;
-            }
-            console.log(`[Vocab] Solicitando sugerencia para "${russianWord}" en ${targetLanguage}`); // DEBUG
-
-            try {
-                const response = await fetchWithAuth('/api/vocabulary/suggest-translation', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ russian_word: russianWord, target_language: targetLanguage })
-                });
-
-                if (response.ok) {
-                    const result = await response.json();
-                    translationInput.value = result.suggested_translation || '';
-                    exampleSentenceInput.value = result.suggested_example_sentence || '';
-                    console.log('[Vocab] Sugerencia recibida:', result); // DEBUG
-                } else {
-                    const errorResult = await response.json();
-                    showCustomModal('Error de Sugerencia', `Error al obtener sugerencias: ${errorResult.detail || 'No se pudieron obtener sugerencias.'}`);
-                    translationInput.value = '';
-                    exampleSentenceInput.value = '';
-                    console.error('[Vocab] Error de API al obtener sugerencias:', errorResult); // DEBUG
-                }
-            } catch (error) {
-                console.error('[Vocab] Error de red al obtener sugerencias:', error); // DEBUG
-                showCustomModal('Error de Red', 'Error de red. No se pudieron obtener sugerencias.');
-                translationInput.value = '';
-                exampleSentenceInput.value = '';
-            }
-        });
-    }
-
-    // New clear button for vocabulary suggestion
-    if (clearSuggestionButton) {
-        clearSuggestionButton.addEventListener('click', () => {
-            russianWordInput.value = '';
-            translationInput.value = '';
-            exampleSentenceInput.value = '';
-            // Reset target language to default if desired, e.g., targetLanguageSelect.value = 'es';
-            console.log('[Vocab] Formulario de vocabulario limpiado.'); // DEBUG
-        });
-    }
-
-    vocabForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const russianWord = russianWordInput.value.trim();
-        const translation = translationInput.value.trim();
-        const exampleSentence = exampleSentenceInput.value.trim();
-
-        if (!russianWord || !translation) {
-            showCustomModal('Entrada Requerida', 'La palabra en ruso y la traducción son obligatorias.');
-            return;
-        }
-        console.log('[Vocab] Intentando añadir elemento de vocabulario...'); // DEBUG
-
-        try {
-            const response = await fetchWithAuth('/api/vocabulary/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ russian_word: russianWord, translation: translation, example_sentence: exampleSentence })
-            });
-            if (response.ok) {
-                showCustomModal('Éxito', '¡Elemento de vocabulario añadido exitosamente!');
-                await loadVocabulary(); // Asegurarse de que esta función se complete
-                vocabForm.reset();
-                console.log('[Vocab] Elemento de vocabulario añadido y lista recargada.'); // DEBUG
-            } else {
-                const errorResult = await response.json();
-                showCustomModal('Error', `Error: ${errorResult.detail || 'No se pudo añadir el elemento de vocabulario.'}`);
-                console.error('[Vocab] Error de API al añadir vocabulario:', errorResult); // DEBUG
-            }
-        } catch (error) {
-            console.error('[Vocab] Error de red al añadir elemento de vocabulario:', error); // DEBUG
-            showCustomModal('Error de Red', 'Error de red. No se pudo añadir el elemento de vocabulario.');
-        }
-    });
-
-    // --- Data Loading Functions ---
-
-    /**
-     * Loads transcriptions from the backend and displays them.
-     * @param {boolean} loadAll - If true, requests all transcriptions; otherwise, requests a limited number.
-     */
-    async function loadTranscriptions(loadAll = false) {
-        console.log('[Transcriptions] Cargando transcripciones, loadAll:', loadAll); // DEBUG
-        try {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                console.log('[Transcriptions] No hay token, omitiendo carga de transcripciones.'); // DEBUG
-                return;
-            }
-
-            let url = '/api/audio/my-transcriptions';
-            if (loadAll) {
-                url += '?limit=0';
-            }
-
-            const response = await fetchWithAuth(url);
-            const transcriptions = await response.json();
-            transcriptionList.innerHTML = '';
-            if (transcriptions.length === 0) {
-                const li = document.createElement('li');
-                li.textContent = 'No hay transcripciones encontradas.';
-                transcriptionList.appendChild(li);
-                console.log('[Transcriptions] No hay transcripciones encontradas.'); // DEBUG
-                return;
-            }
-            // Display most recent first by reversing the array as API might return oldest first
-            transcriptions.reverse();
-            transcriptions.forEach(t => {
-                const li = document.createElement('li');
-                li.classList.add('transcription-item');
-                const timestamp = new Date(t.created_at).toLocaleString();
-                const displayLanguage = t.language ? ` [${t.language.toUpperCase()}]` : ' [Idioma Desconocido]';
-
-                const textContainer = document.createElement('div');
-                textContainer.innerHTML = `<strong>${timestamp}:</strong> ${displayLanguage} <code>${t.original_transcript}</code>`;
-
-                const deleteButton = document.createElement('button');
-                deleteButton.textContent = 'X';
-                deleteButton.classList.add('delete-btn');
-                deleteButton.title = 'Eliminar Transcripción';
-                deleteButton.dataset.id = t.id;
-
-                li.appendChild(textContainer);
-                li.appendChild(deleteButton);
-                transcriptionList.appendChild(li);
-            });
-            console.log('[Transcriptions] Transcripciones renderizadas, adjuntando controladores de eventos.'); // DEBUG
-
-            // Re-attach event listeners after updating the list
-            document.querySelectorAll('.delete-btn').forEach(button => {
-                button.addEventListener('click', async (e) => {
-                    console.log('[Transcriptions] Botón de eliminar transcripción clicado.'); // DEBUG
-                    const transcriptionId = e.target.dataset.id;
-                    const confirmed = await showCustomModal('Confirmar Eliminación', '¿Estás seguro de que quieres eliminar esta transcripción?', true);
-                    if (confirmed) {
-                        console.log(`[Transcriptions] Eliminando transcripción con ID: ${transcriptionId}`); // DEBUG
-                        await deleteTranscription(transcriptionId, loadAll);
-                    } else {
-                        console.log('[Transcriptions] Eliminación de transcripción cancelada.'); // DEBUG
-                    }
-                });
-            });
-
-        } catch (error) {
-            console.error('[Transcriptions] Error al cargar transcripciones:', error); // DEBUG
-            transcriptionList.innerHTML = '<li>Error al cargar transcripciones.</li>';
-        }
-    }
-
-    /**
-     * Deletes a transcription by its ID.
-     * @param {number} transcriptionId - The ID of the transcription to delete.
-     * @param {boolean} currentLoadAllState - The current state of the 'loadAll' flag for transcriptions.
-     */
-    async function deleteTranscription(transcriptionId, currentLoadAllState = false) {
-        console.log(`[Transcriptions] Intentando eliminar transcripción ID: ${transcriptionId}`); // DEBUG
-        try {
-            const response = await fetchWithAuth(`/api/audio/transcriptions/${transcriptionId}`, {
-                method: 'DELETE'
-            });
-
-            if (response.ok) {
-                console.log('[Transcriptions] Transcripción eliminada exitosamente de la API. Recargando lista.'); // DEBUG
-                loadTranscriptions(currentLoadAllState);
-            } else {
-                const errorResult = await response.json();
-                showCustomModal('Error', `Error al eliminar transcripción: ${errorResult.detail || 'Error desconocido'}`);
-                console.error('[Transcriptions] Error de API al eliminar transcripción:', errorResult); // DEBUG
-            }
-        } catch (error) {
-            showCustomModal('Error de Red', 'Error de red. No se pudo eliminar la transcripción.');
-            console.error('[Transcriptions] Error de red durante la eliminación de transcripción:', error); // DEBUG
-        }
-    }
-
-    /**
-     * Deletes a vocabulary item by its ID.
-     * @param {number} itemId - The ID of the vocabulary item to delete.
-     */
-    async function deleteVocabularyItem(itemId) {
-        console.log(`[Vocab] Intentando eliminar elemento de vocabulario ID: ${itemId}`); // DEBUG
-        const confirmed = await showCustomModal('Confirmar Eliminación', '¿Estás seguro de que quieres eliminar este elemento de vocabulario?', true);
-        if (!confirmed) {
-            console.log('[Vocab] Eliminación de vocabulario cancelada.'); // DEBUG
-            return;
-        }
-
-        try {
-            const response = await fetchWithAuth(`/api/vocabulary/${itemId}`, {
-                method: 'DELETE'
-            });
-
-            if (response.ok) {
-                console.log('[Vocab] Elemento de vocabulario eliminado exitosamente de la API. Recargando lista.'); // DEBUG
-                loadVocabulary(); // Reload vocabulary list after deletion
-            } else {
-                const errorResult = await response.json();
-                showCustomModal('Error', `Error al eliminar elemento: ${errorResult.detail || 'Error desconocido'}`);
-                console.error('[Vocab] Error de API al eliminar elemento de vocabulario:', errorResult); // DEBUG
-            }
-        } catch (error) {
-            console.error('[Vocab] Error de red al eliminar elemento de vocabulario:', error); // DEBUG
-            showCustomModal('Error de Red', 'Error de red. No se pudo eliminar el elemento de vocabulario.');
-        }
-    }
-
-    /**
-     * Loads vocabulary items from the backend and displays them.
-     */
-    async function loadVocabulary() {
-        console.log('[Vocab] Cargando vocabulario...'); // DEBUG
-        try {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                console.log('[Vocab] No hay token, omitiendo carga de vocabulario.'); // DEBUG
-                return;
-            }
-
-            const response = await fetchWithAuth('/api/vocabulary/');
-            const items = await response.json();
-
-            vocabList.innerHTML = '';
-
-            if (items.length === 0) {
-                const li = document.createElement('li');
-                li.textContent = 'No hay elementos de vocabulario encontrados.';
-                vocabList.appendChild(li);
-                console.log('[Vocab] No hay elementos de vocabulario encontrados.'); // DEBUG
-                return;
-            }
-
-            items.reverse(); // Display most recent first
-
-            items.forEach(item => {
-                const li = document.createElement('li');
-                li.classList.add('list-item');
-
-                const contentSpan = document.createElement('span');
-                contentSpan.innerHTML = `<strong>${item.russian_word}</strong> - ${item.translation} ${item.example_sentence ? `(${item.example_sentence})` : ''}`;
-                li.appendChild(contentSpan);
-
-                const deleteButton = document.createElement('button');
-                deleteButton.textContent = 'X';
-                deleteButton.classList.add('delete-btn');
-                deleteButton.title = 'Eliminar Elemento de Vocabulario';
-                deleteButton.addEventListener('click', () => { // Usar una función de flecha para capturar item.id
-                    console.log(`[Vocab] Botón de eliminar vocabulario clicado para ID: ${item.id}`); // DEBUG
-                    deleteVocabularyItem(item.id);
-                });
-
-                li.appendChild(deleteButton);
-                vocabList.appendChild(li);
-            });
-            console.log('[Vocab] Vocabulario renderizado, adjuntando controladores de eventos.'); // DEBUG
-        } catch (error) {
-            console.error('[Vocab] Error al cargar vocabulario:', error); // DEBUG
-            vocabList.innerHTML = '<li>Error al cargar elementos de vocabulario.</li>';
-        }
-    }
-
-    // Event Listener for the "Show All Transcriptions" button
-    if (loadAllTranscriptionsButton) {
-        loadAllTranscriptionsButton.addEventListener('click', () => {
-            console.log('[Transcriptions] Botón "Mostrar todas las transcripciones" clicado.'); // DEBUG
-            loadTranscriptions(true);
-        });
-    }
-
-    // Initial check on page load
-    checkAuthenticationAndRenderUI();
-});
+            const targetLanguage = targetLanguageSelect.value
