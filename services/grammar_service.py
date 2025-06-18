@@ -28,12 +28,7 @@ class GrammarService:
         self._tool = None
         self._current_lt_language = None
 
-    # def _create_tool(self, lang_code: str) -> language_tool_python.LanguageTool:
-    #     """
-    #     Create a new LanguageTool instance for the given language code.
-    #     """
-    #     # IMPORTANT: No 'version' argument here, as it causes errors
-    #     return language_tool_python.LanguageTool(lang_code)
+
     def _create_tool(self, lang_code: str) -> language_tool_python.LanguageTool:
         return language_tool_python.LanguageTool(
         lang_code,
