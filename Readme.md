@@ -7,9 +7,9 @@ This web service is designed as an **intelligent and personalized toolbox** to f
 ## Features
 
 -   **User Authentication:** Secure registration and login system using JWT access tokens, enabling a personalized user experience.
--   **Vocabulary Management:** Allows users to create, retrieve, and delete their own vocabulary items (Russian word, translation, example sentence). Includes support for **AI-powered suggestions** (utilizing pre-trained NLP models) that offer translations and example phrases.
--   **AI-Powered Audio Transcription:** Functionality to submit audio files (e.g., user pronunciation recordings) for transcription into text. It leverages **OpenAI's advanced Whisper model** to convert audio to text and detect the language, facilitating speaking practice.
--   **Smart Grammar Checking:** Enables users to submit text to identify and correct grammar errors. It integrates with an **external LanguageTool server** to provide accurate and high-performance grammatical analysis.
+-   **Vocabulary Management:** Allows users to create, retrieve, and delete their own vocabulary items (Russian word, translation, example sentence). Includes support for **AI-powered suggestions** (pre-trained NLP models [Helsinki-NLP](https://github.com/Helsinki-NLP/Opus-MT)) that offer translations and example phrases.
+-   **AI-Powered Audio Transcription:** Functionality to submit audio files (e.g., user pronunciation recordings) for transcription into text. It leverages **OpenAI's advanced [Whisper](https://github.com/openai/whisper) model** to convert audio to text and detect the language, facilitating speaking practice.
+-   **Smart Grammar Checking:** Enables users to submit text to identify and correct grammar errors. It integrates with an **[language_tool_python](language_tool_python)** to provide accurate and high-performance grammatical analysis.
 -   **Persistent Data Storage:** All user data, vocabulary items, and audio transcriptions are securely stored in a relational database.
 -   **Telegram Bot Integration (Potential):** Based on the project structure, it is assumed that integration with a Telegram bot is possible to extend the service's functionalities.
 

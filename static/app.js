@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
             authContainer.style.display = 'none';
             appContainer.style.display = 'flex';
             if (username) {
-                loggedInUsernameSpan.textContent = `¡Bienvenido, ${username}!`;
+                loggedInUsernameSpan.textContent = `USER » ${username.toUpperCase()} »`;
             }
 
             showAppSection('audioSection'); // Show audio tools by default
@@ -401,7 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
             startButton.disabled = true;
             stopButton.disabled = false;
             transcribeButton.style.display = 'none';
-            recordingStatus.textContent = 'Grabando...';
+            recordingStatus.textContent = 'Recording...';
             recordingStatus.classList.add('recording-indicator');
             transcriptionResult.innerHTML = '';
 
